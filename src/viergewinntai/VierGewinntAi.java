@@ -9,6 +9,11 @@ package viergewinntai;
  * @author Dawid
  */
 public class VierGewinntAi {
+    
+    public static GUI mainGUI;
+    public static GameEngine mainGameEngine;
+    public static ArtificialIntelligence playerOneAI;
+    public static ArtificialIntelligence playerTwoAI;
 
     /**
      * @param args the command line arguments
