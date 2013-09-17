@@ -20,5 +20,9 @@ public class VierGewinntAi {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        
+        //mainGameEngine.playingField={{0,0,0,0,0,0,0},{0,0,0,0,0,0,0},{0,0,0,0,0,0,0},{0,0,0,0,0,0,0},{0,0,0,0,0,0,0},{0,0,0,0,0,0,0},{0,0,0,0,0,0,0}};
+        
+        GUI test = new GUI(); 
     }
 }
