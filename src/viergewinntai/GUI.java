@@ -168,7 +168,7 @@ public class GUI extends JFrame {
         
        
         PlayerTurnDisplay.setBounds(250, 50, 350, 80);
-        
+        VierGewinntAi.mainGUI.showPlayerTurnMessage();
         
        field.repaint();
         fenster.add(eins);
@@ -178,7 +178,8 @@ public class GUI extends JFrame {
         fenster.add(fünf); 
         fenster.add(sechs); 
         fenster.add(sieben); 
-
+        fenster.add(PlayerTurnDisplay);
+        
 
 
 
@@ -207,7 +208,7 @@ public class GUI extends JFrame {
         
         
        
-       PlayerTurnDisplay.setText(null);
+       PlayerTurnDisplay.setText("Spieler " + Integer.toString(VierGewinntAi.mainGameEngine.playerTurn) + " ist am Zug");
         
         
         

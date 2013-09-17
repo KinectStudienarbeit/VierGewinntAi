@@ -62,6 +62,7 @@ public class GameEngine {
                         displayPlayerTurn(column, row);
         }
         System.out.println("repaint");
+        VierGewinntAi.mainGUI.showPlayerTurnMessage();
        
     }
     

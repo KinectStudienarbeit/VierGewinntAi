@@ -29,5 +29,6 @@ public class VierGewinntAi {
         mainGUI = new GUI(); 
         mainGUI.initialize();
         
+        
     }
 }
