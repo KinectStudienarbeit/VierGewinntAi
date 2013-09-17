@@ -17,16 +17,60 @@ import javax.swing.JOptionPane;
  */
 public class GUI extends JFrame {
 
-     JLabel PlayerTurnDisplay = new JLabel(); 
-    private JFrame fenster; 
-    public Panel  field; 
-    
+    JLabel PlayerTurnDisplay = new JLabel();
+    private JFrame window;
+    public Panel field;
+
     /**
      * Constuctor for the GIU-Class creation of the window
      *
      */
     public void initialize() {
-        // als fenster-titel gleich mit übergeben)
+
+
+
+
+//Selection of Game-Mode
+        Object[] options = {"Spieler vs. Spieler", "Spieler vs. KI", "KI vs. Spieler", "KI vs. KI"};
+
+        int selected = JOptionPane.showOptionDialog(null,
+                "Bitte wählen sie einen Spielmodi",
+                "Vier Gewinnt",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null, options, options[0]);
+
+        //setting the game-mode
+        switch (selected) {
+            case 0: {
+                VierGewinntAi.mainGameEngine.playerOneHuman = true;
+                VierGewinntAi.mainGameEngine.playerTwoHuman = true;
+                break;
+            }
+            case 1: {
+                VierGewinntAi.mainGameEngine.playerOneHuman = true;
+                VierGewinntAi.mainGameEngine.playerTwoHuman = false;
+                break;
+            }
+            case 2: {
+                VierGewinntAi.mainGameEngine.playerOneHuman = false;
+                VierGewinntAi.mainGameEngine.playerTwoHuman = true;
+                break;
+            }
+            case 3: {
+                VierGewinntAi.mainGameEngine.playerOneHuman = false;
+                VierGewinntAi.mainGameEngine.playerTwoHuman = false;
+                break;
+
+            }
+
+        }
+
+
+
+
+
+
 
         int xfield = 50;
         int yfield = 150;
@@ -34,152 +78,154 @@ public class GUI extends JFrame {
         int ywidth = 378;
 
 
-       fenster = new JFrame("Vier Gewinnt");
+        window = new JFrame("Vier Gewinnt");
 
         // close operation
-        fenster.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-       
 
-       
+
+
 
         // set framesize
-        fenster.setSize(600, 600);
+        window.setSize(600, 600);
 
 
 
         // show frame
-        fenster.setVisible(true);
-        fenster.setLayout(null);
-        
+        window.setVisible(true);
+        window.setLayout(null);
+
         //panel for visualization
-       field = new Panel();
+        field = new Panel();
         field.setBounds(xfield, yfield, xwidth, ywidth);
-       fenster.add(field);
-        
-        
-        
-        JButton eins = new JButton();
-        eins.setOpaque(false);
-        eins.setContentAreaFilled(false);
-        eins.setBorderPainted(false);
-        eins.setBounds(xfield, yfield, 63, ywidth);
-        eins.addActionListener(new java.awt.event.ActionListener() {
+        window.add(field);
+
+
+//setting the buttons for the coloumns with function_calls
+        JButton one = new JButton();
+        one.setOpaque(false);
+        one.setContentAreaFilled(false);
+        one.setBorderPainted(false);
+        one.setBounds(xfield, yfield, 63, ywidth);
+        one.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                System.out.println("eins");
+                System.out.println("one");
                 VierGewinntAi.mainGameEngine.tryMove('a');
-                field.repaint();
-                
-            }
-        });
         
-        JButton zwei = new JButton();
-        zwei.setOpaque(false);
-        zwei.setContentAreaFilled(false);
-        zwei.setBorderPainted(false);
-        zwei.setBounds(xfield+63, yfield, 60, ywidth);
-        zwei.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                System.out.println("zwei");
-                //aufruf der tryturnfunktion
-                VierGewinntAi.mainGameEngine.tryMove('b'); 
-                field.repaint();
             }
         });
 
-        JButton drei = new JButton();
-        drei.setOpaque(false);
-        drei.setContentAreaFilled(false);
-        drei.setBorderPainted(false);
-        drei.setBounds(xfield+2*60, yfield, 63, ywidth);
-        drei.addActionListener(new java.awt.event.ActionListener() {
+        JButton two = new JButton();
+        two.setOpaque(false);
+        two.setContentAreaFilled(false);
+        two.setBorderPainted(false);
+        two.setBounds(xfield + 63, yfield, 60, ywidth);
+        two.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                System.out.println("drei");
+                System.out.println("two");
                 //aufruf der tryturnfunktion
-                 VierGewinntAi.mainGameEngine.tryMove('c');
-                 field.repaint();
+                VierGewinntAi.mainGameEngine.tryMove('b');
+             
             }
         });
 
-        JButton vier = new JButton();
-        vier.setOpaque(false);
-        vier.setContentAreaFilled(false);
-        vier.setBorderPainted(false);
-        vier.setBounds(xfield+3*60, yfield, 63, ywidth);
-        vier.addActionListener(new java.awt.event.ActionListener() {
+        JButton three = new JButton();
+        three.setOpaque(false);
+        three.setContentAreaFilled(false);
+        three.setBorderPainted(false);
+        three.setBounds(xfield + 2 * 60, yfield, 63, ywidth);
+        three.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                System.out.println("vier");
+                System.out.println("three");
                 //aufruf der tryturnfunktion
-                 VierGewinntAi.mainGameEngine.tryMove('d');
-                 field.repaint();
+                VierGewinntAi.mainGameEngine.tryMove('c');
+                ;
             }
         });
-        
-        JButton fünf = new JButton();
-        fünf.setOpaque(false);
-        fünf.setContentAreaFilled(false);
-        fünf.setBorderPainted(false);
-        fünf.setBounds(xfield+4*60, yfield, 63, ywidth);
-        fünf.addActionListener(new java.awt.event.ActionListener() {
+
+        JButton four = new JButton();
+        four.setOpaque(false);
+        four.setContentAreaFilled(false);
+        four.setBorderPainted(false);
+        four.setBounds(xfield + 3 * 60, yfield, 63, ywidth);
+        four.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                System.out.println("fünf");
+                System.out.println("four");
                 //aufruf der tryturnfunktion
-                 VierGewinntAi.mainGameEngine.tryMove('e');
-                 field.repaint();
+                VierGewinntAi.mainGameEngine.tryMove('d');
+               
             }
         });
-        
-         JButton sechs = new JButton();
-        sechs.setOpaque(false);
-        sechs.setContentAreaFilled(false);
-        sechs.setBorderPainted(false);
-        sechs.setBounds(xfield+5*60, yfield, 63, ywidth);
-        sechs.addActionListener(new java.awt.event.ActionListener() {
+
+        JButton five = new JButton();
+        five.setOpaque(false);
+        five.setContentAreaFilled(false);
+        five.setBorderPainted(false);
+        five.setBounds(xfield + 4 * 60, yfield, 63, ywidth);
+        five.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                System.out.println("sechs");
+                System.out.println("five");
                 //aufruf der tryturnfunktion
-                 VierGewinntAi.mainGameEngine.tryMove('f');
-                field.repaint();
-            }
-        });
-        
-        JButton sieben = new JButton();
-        sieben.setOpaque(false);
-        sieben.setContentAreaFilled(false);
-        sieben.setBorderPainted(false);
-        sieben.setBounds(xfield+6*60, yfield, 63, ywidth);
-        sieben.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                System.out.println("sieben");
-                //aufruf der tryturnfunktion
-                 VierGewinntAi.mainGameEngine.tryMove('g');
-                 field.repaint();
+                VierGewinntAi.mainGameEngine.tryMove('e');
                 
             }
         });
-        
-        
-       
+
+        JButton six = new JButton();
+        six.setOpaque(false);
+        six.setContentAreaFilled(false);
+        six.setBorderPainted(false);
+        six.setBounds(xfield + 5 * 60, yfield, 63, ywidth);
+        six.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                System.out.println("six");
+                //aufruf der tryturnfunktion
+                VierGewinntAi.mainGameEngine.tryMove('f');
+               
+            }
+        });
+
+        JButton seven = new JButton();
+        seven.setOpaque(false);
+        seven.setContentAreaFilled(false);
+        seven.setBorderPainted(false);
+        seven.setBounds(xfield + 6 * 60, yfield, 63, ywidth);
+        seven.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                System.out.println("seven");
+                //aufruf der tryturnfunktion
+                VierGewinntAi.mainGameEngine.tryMove('g');
+                
+            }
+        });
+
+
+
         PlayerTurnDisplay.setBounds(250, 50, 350, 80);
+
         VierGewinntAi.mainGUI.showPlayerTurnMessage();
+
+        //initialization of the field
+        field.repaint();
         
-       field.repaint();
-        fenster.add(eins);
-        fenster.add(zwei); 
-        fenster.add(drei); 
-        fenster.add(vier); 
-        fenster.add(fünf); 
-        fenster.add(sechs); 
-        fenster.add(sieben); 
-        fenster.add(PlayerTurnDisplay);
-        
+        // adding all components
+        window.add(one);
+        window.add(two);
+        window.add(three);
+        window.add(four);
+        window.add(five);
+        window.add(six);
+        window.add(seven);
+        window.add(PlayerTurnDisplay);
+
 
 
 
@@ -199,19 +245,20 @@ public class GUI extends JFrame {
      * @param row specifies the row
      */
     public void showMove(char column, byte row) {
+        VierGewinntAi.mainGUI.field.repaint();
     }
 
     /**
      * Shows which players turn it is, called from game engine
      */
     public void showPlayerTurnMessage() {
-        
-        
-       
-       PlayerTurnDisplay.setText("Spieler " + Integer.toString(VierGewinntAi.mainGameEngine.playerTurn) + " ist am Zug");
-        
-        
-        
+
+
+
+        PlayerTurnDisplay.setText("Spieler " + Integer.toString(VierGewinntAi.mainGameEngine.playerTurn) + " ist am Zug");
+
+
+
     }
 
     /**
@@ -219,25 +266,25 @@ public class GUI extends JFrame {
      * engine
      */
     public void showInvalidMoveMessage() {
-        JOptionPane.showMessageDialog(null, "Zug ungültig", "Fehler!", JOptionPane.ERROR_MESSAGE); 
+        JOptionPane.showMessageDialog(null, "Zug ungültig", "Fehler!", JOptionPane.ERROR_MESSAGE);
 
-    
+
     }
 
     /**
      * Shows a game over message with the winner
      */
     public void showWinMessage() {
-         JOptionPane.showMessageDialog(null, "Sie haben gewonnen!", "Glückwunsch!!", JOptionPane.INFORMATION_MESSAGE); 
-        
+        JOptionPane.showMessageDialog(null, "Sie haben gewonnen!", "Glückwunsch!!", JOptionPane.INFORMATION_MESSAGE);
+
     }
 
     /**
      * Empties the field, called from game engine
      */
     public void resetField() {
-       
-        field.repaint();
-        
+
+        VierGewinntAi.mainGUI.field.repaint();
+
     }
 }
