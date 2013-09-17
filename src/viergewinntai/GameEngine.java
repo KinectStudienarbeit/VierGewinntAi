@@ -61,6 +61,8 @@ public class GameEngine {
             }
                         displayPlayerTurn(column, row);
         }
+        System.out.println("repaint");
+       
     }
     
     /**
@@ -175,6 +177,7 @@ public class GameEngine {
         mainGameEngine.playerOneHuman = true;
         mainGameEngine.playerOneHuman = true;
         mainGameEngine.initialize();
+        
         mainGameEngine.displayPlayerTurn(0,0);
         while (true){
             InputStreamReader r = new InputStreamReader(System.in);

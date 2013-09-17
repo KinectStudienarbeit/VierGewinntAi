@@ -22,7 +22,12 @@ public class VierGewinntAi {
         // TODO code application logic here
         
         //mainGameEngine.playingField={{0,0,0,0,0,0,0},{0,0,0,0,0,0,0},{0,0,0,0,0,0,0},{0,0,0,0,0,0,0},{0,0,0,0,0,0,0},{0,0,0,0,0,0,0},{0,0,0,0,0,0,0}};
+        mainGameEngine= new GameEngine(); 
+        mainGameEngine.initialize();
         
-        GUI test = new GUI(); 
+        
+        mainGUI = new GUI(); 
+        mainGUI.initialize();
+        
     }
 }

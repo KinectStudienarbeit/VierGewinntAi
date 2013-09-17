@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 /**
  * The graphical user interface of the application
@@ -17,13 +18,14 @@ import javax.swing.JLabel;
 public class GUI extends JFrame {
 
      JLabel PlayerTurnDisplay = new JLabel(); 
-    
+    private JFrame fenster; 
+    public Panel  field; 
     
     /**
      * Constuctor for the GIU-Class creation of the window
      *
      */
-    public GUI() {
+    public void initialize() {
         // als fenster-titel gleich mit übergeben)
 
         int xfield = 50;
@@ -32,7 +34,7 @@ public class GUI extends JFrame {
         int ywidth = 378;
 
 
-        JFrame fenster = new JFrame("Vier Gewinnt");
+       fenster = new JFrame("Vier Gewinnt");
 
         // close operation
         fenster.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -51,9 +53,9 @@ public class GUI extends JFrame {
         fenster.setLayout(null);
         
         //panel for visualization
-        Panel field = new Panel();
+       field = new Panel();
         field.setBounds(xfield, yfield, xwidth, ywidth);
-        fenster.add(field);
+       fenster.add(field);
         
         
         
@@ -66,7 +68,8 @@ public class GUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent evt) {
                 System.out.println("eins");
-                //aufruf der tryturnfunktion
+                VierGewinntAi.mainGameEngine.tryMove('a');
+                field.repaint();
                 
             }
         });
@@ -81,7 +84,8 @@ public class GUI extends JFrame {
             public void actionPerformed(ActionEvent evt) {
                 System.out.println("zwei");
                 //aufruf der tryturnfunktion
-                
+                VierGewinntAi.mainGameEngine.tryMove('b'); 
+                field.repaint();
             }
         });
 
@@ -95,7 +99,8 @@ public class GUI extends JFrame {
             public void actionPerformed(ActionEvent evt) {
                 System.out.println("drei");
                 //aufruf der tryturnfunktion
-                
+                 VierGewinntAi.mainGameEngine.tryMove('c');
+                 field.repaint();
             }
         });
 
@@ -109,7 +114,8 @@ public class GUI extends JFrame {
             public void actionPerformed(ActionEvent evt) {
                 System.out.println("vier");
                 //aufruf der tryturnfunktion
-                
+                 VierGewinntAi.mainGameEngine.tryMove('d');
+                 field.repaint();
             }
         });
         
@@ -123,7 +129,8 @@ public class GUI extends JFrame {
             public void actionPerformed(ActionEvent evt) {
                 System.out.println("fünf");
                 //aufruf der tryturnfunktion
-                
+                 VierGewinntAi.mainGameEngine.tryMove('e');
+                 field.repaint();
             }
         });
         
@@ -137,7 +144,8 @@ public class GUI extends JFrame {
             public void actionPerformed(ActionEvent evt) {
                 System.out.println("sechs");
                 //aufruf der tryturnfunktion
-                
+                 VierGewinntAi.mainGameEngine.tryMove('f');
+                field.repaint();
             }
         });
         
@@ -151,6 +159,8 @@ public class GUI extends JFrame {
             public void actionPerformed(ActionEvent evt) {
                 System.out.println("sieben");
                 //aufruf der tryturnfunktion
+                 VierGewinntAi.mainGameEngine.tryMove('g');
+                 field.repaint();
                 
             }
         });
@@ -160,7 +170,7 @@ public class GUI extends JFrame {
         PlayerTurnDisplay.setBounds(250, 50, 350, 80);
         
         
-        field.repaint();
+       field.repaint();
         fenster.add(eins);
         fenster.add(zwei); 
         fenster.add(drei); 
@@ -208,17 +218,25 @@ public class GUI extends JFrame {
      * engine
      */
     public void showInvalidMoveMessage() {
+        JOptionPane.showMessageDialog(null, "Zug ungültig", "Fehler!", JOptionPane.ERROR_MESSAGE); 
+
+    
     }
 
     /**
      * Shows a game over message with the winner
      */
     public void showWinMessage() {
+         JOptionPane.showMessageDialog(null, "Sie haben gewonnen!", "Glückwunsch!!", JOptionPane.INFORMATION_MESSAGE); 
+        
     }
 
     /**
      * Empties the field, called from game engine
      */
     public void resetField() {
+       
+        field.repaint();
+        
     }
 }

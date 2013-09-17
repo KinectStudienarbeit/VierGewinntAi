@@ -42,22 +42,21 @@ protected void paintComponent( Graphics g ) {
     
     
     
-    
     for(int i=0;i<7;i++){
         for(int y=0;y<6;y++){
-            if(inhalt[y][i]==0){
+            if(VierGewinntAi.mainGameEngine.playingField[i][5-y]==0){
                 g.setColor(Color.black);
-            }else if(inhalt[y][i]==1){
+                
+            }else if(VierGewinntAi.mainGameEngine.playingField[i][5-y]==1){
                  g.setColor(Color.yellow);
                 
-            }else if(inhalt[y][i]==2){
+            }else if(VierGewinntAi.mainGameEngine.playingField[i][5-y]==2){
                  g.setColor(Color.red);
             }
-            g.fillOval(i*60+4, y*60+4, 55, 55);
+            g.fillOval(i*60+4,y*60+4, 55, 55);
             
         }
         
-      //  JOptionPane.showMessageDialog(null, "Laden ist fehlgeschlagen.", "Fehler!", JOptionPane.ERROR_MESSAGE); 
         
     }
     
