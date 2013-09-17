@@ -43,7 +43,7 @@ public class GameEngine {
     
     public void tryMove(int column){
         if(!checkMove(column)) {
-            displayError();
+            VierGewinntAi.mainGUI.showInvalidMoveMessage();
         } else {
             int i = 0;
             while(playingField[column][i] != 0){
@@ -51,19 +51,20 @@ public class GameEngine {
             }
             int row = i;
             playingField[column][row] = playerTurn;
+            
+            if(checkWin(column, row)){
+                VierGewinntAi.mainGUI.showWinMessage();
+                resetGame();
+                return;
+            }
             if(playerTurn == 1){
                 playerTurn = 2;
             } else {
                 playerTurn = 1;
             }
-            if(checkWin(column, row)){
-                System.out.println(playerTurn + " won!");
-            }
-                        displayPlayerTurn(column, row);
-        }
-      
-        VierGewinntAi.mainGUI.showPlayerTurnMessage();
-       
+            VierGewinntAi.mainGUI.showPlayerTurnMessage();
+            //VierGewinntAi.mainGUI.showMove((char)(column + 65), row);
+        }       
     }
     
     /**
@@ -167,50 +168,9 @@ public class GameEngine {
      * Resets the game
      */
     public void resetGame(){
+        initialize();
+        VierGewinntAi.mainGUI.showPlayerTurnMessage();
         
     }
     
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        GameEngine mainGameEngine = new GameEngine();
-        mainGameEngine.playerOneHuman = true;
-        mainGameEngine.playerOneHuman = true;
-        mainGameEngine.initialize();
-        
-        mainGameEngine.displayPlayerTurn(0,0);
-        while (true){
-            InputStreamReader r = new InputStreamReader(System.in);
-            try{
-            mainGameEngine.tryMove((char)r.read());
-            } catch(Exception e)
-                
-            {
-                System.out.println("mist");
-                e.printStackTrace();
-            }
-        }
-    }
-    
-    private void display(){
-        for(int i = 5; i >= 0; i--){
-            String s = "";
-            for(int j = 0; j < 7; j++){
-                s += playingField[j][i] + " ";
-            }
-            System.out.println(s);
-        }
-        System.out.println("a b c d e f g");
-    }
-    
-    private void displayError(){
-        System.out.println("Not a valid move!");
-        display();
-    }
-    
-    private void displayPlayerTurn(int column, int row){
-        System.out.println("Player " + Integer.toString(playerTurn) + " ist dran");
-        display();
-    }
 }
