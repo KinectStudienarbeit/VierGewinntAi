@@ -63,7 +63,7 @@ public class GameEngine {
                 playerTurn = 1;
             }
             VierGewinntAi.mainGUI.showPlayerTurnMessage();
-            //VierGewinntAi.mainGUI.showMove((char)(column + 65), row);
+            VierGewinntAi.mainGUI.showMove((char)(column + 65), (byte)row);
         }       
     }
     
@@ -170,7 +170,7 @@ public class GameEngine {
     public void resetGame(){
         initialize();
         VierGewinntAi.mainGUI.showPlayerTurnMessage();
-        
+        VierGewinntAi.mainGUI.resetField();
     }
     
 }
