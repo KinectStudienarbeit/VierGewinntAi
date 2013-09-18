@@ -64,6 +64,11 @@ public class GameEngine {
             }
             VierGewinntAi.mainGUI.showPlayerTurnMessage();
             VierGewinntAi.mainGUI.showMove();
+            
+            if(checkFull()){
+                VierGewinntAi.mainGUI.showFullMessage();
+                resetGame();
+            }
         }       
     }
     
@@ -86,6 +91,17 @@ public class GameEngine {
     
     private void startAI(){
         
+    }
+    
+    private boolean checkFull(){
+        int count = 0;
+        for(int i = 0; i < 7; i++){
+            if ( playingField[i][5] != 0){
+                count ++;
+            }
+        }
+        
+        return count >= 7;
     }
     
     /**
