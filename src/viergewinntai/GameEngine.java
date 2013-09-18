@@ -63,7 +63,7 @@ public class GameEngine {
                 playerTurn = 1;
             }
             VierGewinntAi.mainGUI.showPlayerTurnMessage();
-            VierGewinntAi.mainGUI.showMove((char)(column + 65), (byte)row);
+            VierGewinntAi.mainGUI.showMove();
         }       
     }
     

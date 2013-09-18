@@ -211,7 +211,7 @@ public class GUI extends JFrame {
 
         PlayerTurnDisplay.setBounds(250, 50, 350, 80);
 
-        VierGewinntAi.mainGUI.showPlayerTurnMessage();
+//        VierGewinntAi.mainGUI.showPlayerTurnMessage();
 
         //initialization of the field
         field.repaint();
@@ -225,8 +225,8 @@ public class GUI extends JFrame {
         window.add(six);
         window.add(seven);
         window.add(PlayerTurnDisplay);
-
-
+        
+        showPlayerTurnMessage();
 
 
     }
@@ -244,7 +244,7 @@ public class GUI extends JFrame {
      * @param column specifies the column
      * @param row specifies the row
      */
-    public void showMove(char column, byte row) {
+    public void showMove() {
         VierGewinntAi.mainGUI.field.repaint();
     }
 
