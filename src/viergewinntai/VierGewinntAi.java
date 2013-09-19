@@ -10,10 +10,10 @@ package viergewinntai;
  */
 public class VierGewinntAi {
     
-    public static GUI mainGUI;
-    public static GameEngine mainGameEngine;
-    public static ArtificialIntelligence playerOneAI;
-    public static ArtificialIntelligence playerTwoAI;
+    public static GUI mainGUI = new GUI();
+    public static GameEngine mainGameEngine = new GameEngine();
+    public static ArtificialIntelligence[] AI = {new ArtificialIntelligence(), new ArtificialIntelligence()};
+    
 
     /**
      * @param args the command line arguments
@@ -21,13 +21,9 @@ public class VierGewinntAi {
     public static void main(String[] args) {
         // TODO code application logic here
         
-        //mainGameEngine.playingField={{0,0,0,0,0,0,0},{0,0,0,0,0,0,0},{0,0,0,0,0,0,0},{0,0,0,0,0,0,0},{0,0,0,0,0,0,0},{0,0,0,0,0,0,0},{0,0,0,0,0,0,0}};
-        mainGameEngine= new GameEngine(); 
-        mainGameEngine.initialize();
-        
-        
-        mainGUI = new GUI(); 
         mainGUI.initialize();
+        
+        mainGameEngine.initialize();
         
         
     }

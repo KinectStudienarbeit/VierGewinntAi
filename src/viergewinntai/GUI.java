@@ -43,23 +43,23 @@ public class GUI extends JFrame {
         //setting the game-mode
         switch (selected) {
             case 0: {
-                VierGewinntAi.mainGameEngine.playerOneHuman = true;
-                VierGewinntAi.mainGameEngine.playerTwoHuman = true;
+                VierGewinntAi.mainGameEngine.setPlayerOneHuman(true);
+                VierGewinntAi.mainGameEngine.setPlayerTwoHuman(true);
                 break;
             }
             case 1: {
-                VierGewinntAi.mainGameEngine.playerOneHuman = true;
-                VierGewinntAi.mainGameEngine.playerTwoHuman = false;
+                VierGewinntAi.mainGameEngine.setPlayerOneHuman(true);
+                VierGewinntAi.mainGameEngine.setPlayerTwoHuman(false);
                 break;
             }
             case 2: {
-                VierGewinntAi.mainGameEngine.playerOneHuman = false;
-                VierGewinntAi.mainGameEngine.playerTwoHuman = true;
+                VierGewinntAi.mainGameEngine.setPlayerOneHuman(false);
+                VierGewinntAi.mainGameEngine.setPlayerTwoHuman(true);
                 break;
             }
             case 3: {
-                VierGewinntAi.mainGameEngine.playerOneHuman = false;
-                VierGewinntAi.mainGameEngine.playerTwoHuman = false;
+                VierGewinntAi.mainGameEngine.setPlayerOneHuman(false);
+                VierGewinntAi.mainGameEngine.setPlayerTwoHuman(false);
                 break;
 
             }
@@ -104,12 +104,12 @@ public class GUI extends JFrame {
 
 //setting the buttons for the coloumns with function_calls
         Button[] buttons = new Button[7];
-        
-        for(int i = 0; i < 7; i++){
-            buttons[i] = new Button(xfield + i*60, yfield, 60, ywidth, (char)(i+65));
+
+        for (int i = 0; i < 7; i++) {
+            buttons[i] = new Button(xfield + i * 60, yfield, 60, ywidth, (char) (i + 65));
             window.add(buttons[i]);
         }
-                
+
 //        JButton one = new JButton();
 //        one.setOpaque(false);
 //        one.setContentAreaFilled(false);
@@ -252,7 +252,9 @@ public class GUI extends JFrame {
      * @param row specifies the row
      */
     public void showMove() {
+
         VierGewinntAi.mainGUI.field.repaint();
+
     }
 
     /**

@@ -14,8 +14,7 @@ import java.util.Arrays;
  */
 public class GameEngine {
     
-    public boolean playerOneHuman;  //indicates if the first player is human
-    public boolean playerTwoHuman;  //indicates if the second player is human
+    private boolean[] playerHuman = new boolean[2];
     public int[][] playingField = new int[7][6];  //the field with all positions, 0=empty, 1=first player, 2=second player
     public int playerTurn; //1=first player's turn, 2=second player's turn
     public int winRule = 4;    //how many pieces in a line to win
@@ -31,6 +30,20 @@ public class GameEngine {
             }
         }
         playerTurn = 1;
+        
+        VierGewinntAi.mainGUI.showPlayerTurnMessage();
+        
+        if(!playerHuman[playerTurn-1]){
+            startAi();
+        }
+    }
+    
+    public void setPlayerOneHuman(boolean set){
+        playerHuman[0] = set;
+    }
+    
+    public void setPlayerTwoHuman(boolean set){
+        playerHuman[1] = set;
     }
     
     /**
@@ -52,22 +65,29 @@ public class GameEngine {
             int row = i;
             playingField[column][row] = playerTurn;
             
+            VierGewinntAi.mainGUI.showMove();
+            
             if(checkWin(column, row)){
                 VierGewinntAi.mainGUI.showWinMessage();
                 resetGame();
                 return;
             }
+            
+            if(checkFull()){
+                VierGewinntAi.mainGUI.showFullMessage();
+                resetGame();
+            }
+            
             if(playerTurn == 1){
                 playerTurn = 2;
             } else {
                 playerTurn = 1;
             }
             VierGewinntAi.mainGUI.showPlayerTurnMessage();
-            VierGewinntAi.mainGUI.showMove();
             
-            if(checkFull()){
-                VierGewinntAi.mainGUI.showFullMessage();
-                resetGame();
+                        
+            if (!playerHuman[playerTurn-1]){
+                startAi();
             }
         }       
     }
@@ -89,8 +109,8 @@ public class GameEngine {
         return true;
     }
     
-    private void startAI(){
-        
+    private void startAi(){
+        VierGewinntAi.AI[playerTurn-1].startAi();
     }
     
     private boolean checkFull(){
