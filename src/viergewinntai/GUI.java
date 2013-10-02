@@ -66,12 +66,6 @@ public class GUI extends JFrame {
 
         }
 
-
-
-
-
-
-
         int xfield = 50;
         int yfield = 150;
         int xwidth = 444;
@@ -110,111 +104,6 @@ public class GUI extends JFrame {
             window.add(buttons[i]);
         }
 
-//        JButton one = new JButton();
-//        one.setOpaque(false);
-//        one.setContentAreaFilled(false);
-//        one.setBorderPainted(false);
-//        one.setBounds(xfield, yfield, 63, ywidth);
-//        one.addActionListener(new java.awt.event.ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent evt) {
-//                System.out.println("one");
-//                VierGewinntAi.mainGameEngine.tryMove('a');
-//
-//            }
-//        });
-//
-//        JButton two = new JButton();
-//        two.setOpaque(false);
-//        two.setContentAreaFilled(false);
-//        two.setBorderPainted(false);
-//        two.setBounds(xfield + 63, yfield, 60, ywidth);
-//        two.addActionListener(new java.awt.event.ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent evt) {
-//                System.out.println("two");
-//                //aufruf der tryturnfunktion
-//                VierGewinntAi.mainGameEngine.tryMove('b');
-//
-//            }
-//        });
-//
-//        JButton three = new JButton();
-//        three.setOpaque(false);
-//        three.setContentAreaFilled(false);
-//        three.setBorderPainted(false);
-//        three.setBounds(xfield + 2 * 60, yfield, 63, ywidth);
-//        three.addActionListener(new java.awt.event.ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent evt) {
-//                System.out.println("three");
-//                //aufruf der tryturnfunktion
-//                VierGewinntAi.mainGameEngine.tryMove('c');
-//
-//            }
-//        });
-//
-//        JButton four = new JButton();
-//        four.setOpaque(false);
-//        four.setContentAreaFilled(false);
-//        four.setBorderPainted(false);
-//        four.setBounds(xfield + 3 * 60, yfield, 63, ywidth);
-//        four.addActionListener(new java.awt.event.ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent evt) {
-//                System.out.println("four");
-//                //aufruf der tryturnfunktion
-//                VierGewinntAi.mainGameEngine.tryMove('d');
-//
-//            }
-//        });
-//
-//        JButton five = new JButton();
-//        five.setOpaque(false);
-//        five.setContentAreaFilled(false);
-//        five.setBorderPainted(false);
-//        five.setBounds(xfield + 4 * 60, yfield, 63, ywidth);
-//        five.addActionListener(new java.awt.event.ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent evt) {
-//                System.out.println("five");
-//                //aufruf der tryturnfunktion
-//                VierGewinntAi.mainGameEngine.tryMove('e');
-//
-//            }
-//        });
-//
-//        JButton six = new JButton();
-//        six.setOpaque(false);
-//        six.setContentAreaFilled(false);
-//        six.setBorderPainted(false);
-//        six.setBounds(xfield + 5 * 60, yfield, 63, ywidth);
-//        six.addActionListener(new java.awt.event.ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent evt) {
-//                System.out.println("six");
-//                //aufruf der tryturnfunktion
-//                VierGewinntAi.mainGameEngine.tryMove('f');
-//
-//            }
-//        });
-//
-//        JButton seven = new JButton();
-//        seven.setOpaque(false);
-//        seven.setContentAreaFilled(false);
-//        seven.setBorderPainted(false);
-//        seven.setBounds(xfield + 6 * 60, yfield, 63, ywidth);
-//        seven.addActionListener(new java.awt.event.ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent evt) {
-//                System.out.println("seven");
-//                //aufruf der tryturnfunktion
-//                VierGewinntAi.mainGameEngine.tryMove('g');
-//
-//            }
-//        });
-
-
 
         PlayerTurnDisplay.setBounds(250, 50, 350, 80);
 
@@ -223,14 +112,7 @@ public class GUI extends JFrame {
         //initialization of the field
         field.repaint();
 
-        // adding all components
-//        window.add(one);
-//        window.add(two);
-//        window.add(three);
-//        window.add(four);
-//        window.add(five);
-//        window.add(six);
-//        window.add(seven);
+
         window.add(PlayerTurnDisplay);
 
         showPlayerTurnMessage();

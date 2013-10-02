@@ -10,9 +10,9 @@ package viergewinntai;
  */
 public class VierGewinntAi {
     
-    public static GUI mainGUI = new GUI();
-    public static GameEngine mainGameEngine = new GameEngine();
-    public static ArtificialIntelligence[] AI = {new ArtificialIntelligence(), new ArtificialIntelligence()};
+//    public static GUI mainGUI = new GUI();
+//    public static GameEngine mainGameEngine = new GameEngine();
+//    public static ArtificialIntelligence[] AI = {new ArtificialIntelligence(), new ArtificialIntelligence()};
     
 
     /**
@@ -21,10 +21,11 @@ public class VierGewinntAi {
     public static void main(String[] args) {
         // TODO code application logic here
         
-        mainGUI.initialize();
+//        mainGUI.initialize();
+//
+//        mainGameEngine.initialize();
         
-        mainGameEngine.initialize();
-        
-        
+        GUI_ g = new GUI_();
+        g.initialize();
     }
 }
