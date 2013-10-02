@@ -5,125 +5,87 @@
 package viergewinntai;
 
 import java.awt.event.ActionEvent;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.*;
 
 /**
- * The graphical user interface of the application
  *
  * @author rusinda
  */
-public class GUI extends JFrame {
+public class GUI {
 
-    JLabel PlayerTurnDisplay = new JLabel();
-    private JFrame window;
-    public Panel field;
+    private final int FRAMEWIDTH = 1200;
+    private final int FRAMEHEIGHT = 700;
+    private final int PLAYINGFIELDX = 50;
+    private final int PLAYINGFIELDY = 100;
+    private final int ROWBUTTONOFFSETX = 30;
+    private final int ROWBUTTONWIDTH = 93;
+    private final int ROWBUTTONHEIGHT = 525;
+    private final boolean SHOWROWBUTTONS = false;
+    private final String PLAYERONEPIC = "graphics\\playerone.png";
+    private final String PLAYERTWOPIC = "graphics\\playertwo.png";
+    private final String PLAYINGFIELDPIC = "graphics\\playingfield.png";
+    private final int PIECEOFFSETXLEFT = 6;
+    private final int PIECEOFFSETXBETWEEN = 7;
+    private final int PIECEOFFSETYUP = 16;
+    private final int ANIMATIONYOFFSET = 20;
+    private JLabel field;
+    private JPanel mainPanel = new JPanel();
+    private JFrame mainFrame = new JFrame();
+    private BufferedImage playerOnePic;
+    private BufferedImage playerTwoPic;
+    private LinkedList<JLabel> pieces = new LinkedList();
+    
+    public boolean lock = false;
 
-    /**
-     * Constuctor for the GIU-Class creation of the window
-     *
-     */
     public void initialize() {
 
+        VierGewinntAi.mainGameEngine.setPlayerOneHuman(true);
+        VierGewinntAi.mainGameEngine.setPlayerTwoHuman(true);
 
-
-
-//Selection of Game-Mode
-        Object[] options = {"Spieler vs. Spieler", "Spieler vs. KI", "KI vs. Spieler", "KI vs. KI"};
-
-        int selected = JOptionPane.showOptionDialog(null,
-                "Bitte wählen sie einen Spielmodi",
-                "Vier Gewinnt",
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.INFORMATION_MESSAGE,
-                null, options, options[0]);
-
-        //setting the game-mode
-        switch (selected) {
-            case 0: {
-                VierGewinntAi.mainGameEngine.setPlayerOneHuman(true);
-                VierGewinntAi.mainGameEngine.setPlayerTwoHuman(true);
-                break;
-            }
-            case 1: {
-                VierGewinntAi.mainGameEngine.setPlayerOneHuman(true);
-                VierGewinntAi.mainGameEngine.setPlayerTwoHuman(false);
-                break;
-            }
-            case 2: {
-                VierGewinntAi.mainGameEngine.setPlayerOneHuman(false);
-                VierGewinntAi.mainGameEngine.setPlayerTwoHuman(true);
-                break;
-            }
-            case 3: {
-                VierGewinntAi.mainGameEngine.setPlayerOneHuman(false);
-                VierGewinntAi.mainGameEngine.setPlayerTwoHuman(false);
-                break;
-
-            }
-
-        }
-
-        int xfield = 50;
-        int yfield = 150;
-        int xwidth = 444;
-        int ywidth = 378;
-
-
-        window = new JFrame("Vier Gewinnt");
-
-        // close operation
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-
-
-
-
-        // set framesize
-        window.setSize(600, 600);
-
-
-
-        // show frame
-        window.setVisible(true);
-        window.setLayout(null);
-
-        //panel for visualization
-        field = new Panel();
-        field.setBounds(xfield, yfield, xwidth, ywidth);
-        window.add(field);
-
-
-//setting the buttons for the coloumns with function_calls
-        Button[] buttons = new Button[7];
-
-        for (int i = 0; i < 7; i++) {
-            buttons[i] = new Button(xfield + i * 60, yfield, 60, ywidth, (char) (i + 65));
-            window.add(buttons[i]);
-        }
-
-
-        PlayerTurnDisplay.setBounds(250, 50, 350, 80);
-
-//        VierGewinntAi.mainGUI.showPlayerTurnMessage();
-
-        //initialization of the field
-        field.repaint();
-
-
-        window.add(PlayerTurnDisplay);
-
-        showPlayerTurnMessage();
-
-
+        showField();
     }
 
     /**
      * Builds and displays the playing field
      */
     public void showField() {
+        mainFrame.setSize(FRAMEWIDTH, FRAMEHEIGHT);
+        BufferedImage myPicture = null;
+        try {
+            myPicture = ImageIO.read(new File(PLAYINGFIELDPIC));
+        } catch (IOException ex) {
+        }
+        field = new JLabel(new ImageIcon(myPicture));
+        mainFrame.setLayout(null);
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.add(mainPanel);
+        mainPanel.setBounds(0, 0, FRAMEWIDTH, FRAMEHEIGHT);
+        mainPanel.setLayout(null);
+        mainPanel.add(field);
+        field.setBounds(PLAYINGFIELDX, PLAYINGFIELDY, myPicture.getWidth(), myPicture.getHeight());
+        field.setVisible(true);
+        System.out.println(field.getLocation());
+
+        RowButton[] buttons = new RowButton[7];
+
+        for (int i = 0; i < 7; i++) {
+            buttons[i] = new RowButton(PLAYINGFIELDX + ROWBUTTONOFFSETX + i * ROWBUTTONWIDTH, PLAYINGFIELDY, ROWBUTTONWIDTH, ROWBUTTONHEIGHT, (char) (i + 65));
+            mainPanel.add(buttons[i]);
+        }
+
+        mainFrame.setVisible(true);
+        try {
+            playerOnePic = ImageIO.read(new File(PLAYERONEPIC));
+            playerTwoPic = ImageIO.read(new File(PLAYERTWOPIC));
+        } catch (IOException ex) {
+        }
     }
 
     /**
@@ -133,23 +95,39 @@ public class GUI extends JFrame {
      * @param column specifies the column
      * @param row specifies the row
      */
-    public void showMove() {
+    public void showMove(int player, int column, int row) {
+        if (player > 1) {
+            pieces.add(new JLabel(new ImageIcon(playerTwoPic)));
+        } else {
+            pieces.add(new JLabel(new ImageIcon(playerOnePic)));
+        }
 
-        VierGewinntAi.mainGUI.field.repaint();
+        mainPanel.add(pieces.getLast());
+        animate(pieces.getLast(), PLAYINGFIELDX + ROWBUTTONOFFSETX + PIECEOFFSETXLEFT + ((PIECEOFFSETXBETWEEN + playerOnePic.getHeight()) * (column - 1)), PLAYINGFIELDY + PIECEOFFSETYUP + ((6 - row) * playerOnePic.getHeight()), playerOnePic.getHeight(), playerOnePic.getWidth());
+        //pieces.getLast().setBounds(PLAYINGFIELDX + ROWBUTTONOFFSETX + PIECEOFFSETXLEFT + ((PIECEOFFSETXBETWEEN + playerOnePic.getHeight()) * (column-1)), PLAYINGFIELDY + PIECEOFFSETYUP + ((6 - row) * playerOnePic.getHeight()), playerOnePic.getHeight(), playerOnePic.getWidth());
+    }
 
+    private void animate(JLabel piece, int x, int lastY, int width, int height) {
+
+        piece.setBounds(x, ANIMATIONYOFFSET, width, height);
+        for (int i = ANIMATIONYOFFSET; i <= lastY; i++) {
+            try {
+                Thread.sleep(3);
+            } catch (InterruptedException ex) {
+            }
+            piece.setBounds(x, i, width, height);
+        }
+    }
+
+    public void showFullMessage() {
+        JOptionPane.showMessageDialog(null, "Gleichstand!", "Gleichstand!", JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
      * Shows which players turn it is, called from game engine
      */
     public void showPlayerTurnMessage() {
-
-
-
-        PlayerTurnDisplay.setText("Spieler " + Integer.toString(VierGewinntAi.mainGameEngine.playerTurn) + " ist am Zug");
-
-
-
+//        PlayerTurnDisplay.setText("Spieler " + Integer.toString(VierGewinntAi.mainGameEngine.playerTurn) + " ist am Zug");
     }
 
     /**
@@ -174,27 +152,24 @@ public class GUI extends JFrame {
      * Empties the field, called from game engine
      */
     public void resetField() {
-
-        VierGewinntAi.mainGUI.field.repaint();
-
     }
 
-    public void showFullMessage() {
-        JOptionPane.showMessageDialog(null, "Gleichstand!", "Gleichstand!", JOptionPane.INFORMATION_MESSAGE);
-    }
+    private class RowButton extends JButton {
 
-    private class Button extends JButton {
-
-        public Button(int xfield, int yfield, int xwidth, int ywidth, final char column) {
-            this.setOpaque(false);
-            this.setContentAreaFilled(false);
-            this.setBorderPainted(false);
+        public RowButton(int xfield, int yfield, int xwidth, int ywidth, final char column) {
+            this.setOpaque(SHOWROWBUTTONS);
+            this.setContentAreaFilled(SHOWROWBUTTONS);
+            this.setBorderPainted(SHOWROWBUTTONS);
             this.setBounds(xfield, yfield, xwidth, ywidth);
             this.addActionListener(new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent evt) {
 
-                    VierGewinntAi.mainGameEngine.tryMove(column);
+                    if(!lock) {
+                        lock = true;
+                        VierGewinntAi.mainGameEngine.tryMove(column);
+                    }
+//                    JOptionPane.showMessageDialog(null, Character.toString(column));
 
                 }
             });

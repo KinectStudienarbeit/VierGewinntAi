@@ -65,7 +65,7 @@ public class GameEngine {
             int row = i;
             playingField[column][row] = playerTurn;
             
-            VierGewinntAi.mainGUI.showMove();
+            VierGewinntAi.mainGUI.showMove(playerTurn, column + 1, row + 1);
             
             if(checkWin(column, row)){
                 VierGewinntAi.mainGUI.showWinMessage();
@@ -88,6 +88,8 @@ public class GameEngine {
                         
             if (!playerHuman[playerTurn-1]){
                 startAi();
+            } else {
+                VierGewinntAi.mainGUI.lock = false;
             }
         }       
     }
