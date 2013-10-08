@@ -15,7 +15,11 @@ import java.util.Arrays;
 public class GameEngine {
     
     private boolean[] playerHuman = new boolean[2];
-    public int[][] playingField = new int[7][6];  //the field with all positions, 0=empty, 1=first player, 2=second player
+    private int[][] playingField = new int[7][6];  //the field with all positions, 0=empty, 1=first player, 2=second player
+
+    public int[][] getPlayingField() {
+        return VierGewinntAi.cloneArray((playingField));
+    }
     public int playerTurn; //1=first player's turn, 2=second player's turn
     public int winRule = 4;    //how many pieces in a line to win
     
@@ -64,6 +68,10 @@ public class GameEngine {
             }
             int row = i;
             playingField[column][row] = playerTurn;
+            
+            for (int aaa = 0; aaa<7; aaa++){
+                System.out.println(Arrays.toString(playingField[aaa]));
+            }
             
             VierGewinntAi.mainGUI.showMove(playerTurn, column + 1, row + 1);
             

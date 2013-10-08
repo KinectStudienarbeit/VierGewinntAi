@@ -47,7 +47,7 @@ public class GUI {
     public void initialize() {
 
         VierGewinntAi.mainGameEngine.setPlayerOneHuman(true);
-        VierGewinntAi.mainGameEngine.setPlayerTwoHuman(true);
+        VierGewinntAi.mainGameEngine.setPlayerTwoHuman(false);
 
         showField();
     }
@@ -111,10 +111,10 @@ public class GUI {
 
         piece.setBounds(x, ANIMATIONYOFFSET, width, height);
         for (int i = ANIMATIONYOFFSET; i <= lastY; i++) {
-            try {
-                Thread.sleep(3);
-            } catch (InterruptedException ex) {
-            }
+//            try {
+//                Thread.sleep(3);
+//            } catch (InterruptedException ex) {
+//            }
             piece.setBounds(x, i, width, height);
         }
     }
