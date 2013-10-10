@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  */
 public class ArtificialIntelligence {
     
-    private final int ALPHABETADEPTH = 3;
+    private final int ALPHABETADEPTH = 4;
     private int[][] field;
     private int[][] processingField;
     

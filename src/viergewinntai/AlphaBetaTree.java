@@ -48,7 +48,7 @@ public class AlphaBetaTree {
 
                         row3++;
                     }
-                    processingField3[column3][row3] = 2;
+                 
 //                    System.out.println(column3 + " " + row3 + " " + processingField[column3][row3]);
                     data.get(column1).children.get(column2).addChild(new Node((heuristicVals[column3][row3])));
 
@@ -86,13 +86,14 @@ public class AlphaBetaTree {
             // only in final depth:
             // Evaluation of processingField_current so that heurVals will be filled
             if (depth == depth_current){
-                depth_current=1;
+                
                 data.add(new Node((heurVals[column][row])));
             }
             // next depth-step
             else{
                 depth_current++;
                 AlphaBetaTree.this.recTree(processingField_current, depth, depth_current, heurVals);
+                depth_current--;
             }
         }
         
