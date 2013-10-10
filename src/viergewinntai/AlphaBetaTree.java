@@ -16,7 +16,7 @@ public class AlphaBetaTree {
 
     public AlphaBetaTree(int[][] field, int depth, int[][] heuristicVals) {
 
-        recTree(field, depth, 1, heuristicVals);
+        //AlphaBetaTree.this.recTree(field, depth, 1, heuristicVals);
 
         for (int column1 = 0; column1 < 7; column1++) {
             int[][] processingField1 = VierGewinntAi.cloneArray((field));   
@@ -48,6 +48,7 @@ public class AlphaBetaTree {
 
                         row3++;
                     }
+                    processingField3[column3][row3] = 2;
 //                    System.out.println(column3 + " " + row3 + " " + processingField[column3][row3]);
                     data.get(column1).children.get(column2).addChild(new Node((heuristicVals[column3][row3])));
 
@@ -68,7 +69,7 @@ public class AlphaBetaTree {
     public void recTree(int[][] processingField_above, int depth, int depth_current, int[][] heurVals){
         // go through columns from left to right
         for (int column = 0; column < 7; column++) {
-            int[][] processingField_current = VierGewinntAi.cloneArray((processingField_above));   
+            int[][] processingField_current = VierGewinntAi.cloneArray((processingField_above));              
                         
             // go through rows of the current column until a free space to set a new coin
             // in the end "row" represents the coin that was set
@@ -91,7 +92,7 @@ public class AlphaBetaTree {
             // next depth-step
             else{
                 depth_current++;
-                recTree(processingField_current, depth, depth_current, heurVals);
+                AlphaBetaTree.this.recTree(processingField_current, depth, depth_current, heurVals);
             }
         }
         
