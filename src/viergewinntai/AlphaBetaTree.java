@@ -16,8 +16,6 @@ public class AlphaBetaTree {
 
     public AlphaBetaTree(int[][] field, int depth, int[][] heuristicVals) {
 
-
-
         for (int column1 = 0; column1 < 7; column1++) {
             int[][] processingField1 = VierGewinntAi.cloneArray((field));
             int row1 = 0;
@@ -51,21 +49,15 @@ public class AlphaBetaTree {
 //                    System.out.println(column3 + " " + row3 + " " + processingField[column3][row3]);
                     data.get(column1).children.get(column2).addChild(new Node((heuristicVals[column3][row3])));
 
-
-                    int test__ = 0;
                 }
-                int test_ = 0;
             }
         }
 
-
-
         int test = 0;
-
 
     }
 
-    private class Node {
+    public class Node {
 
         public int value;
         public LinkedList<Node> children = new LinkedList<>();

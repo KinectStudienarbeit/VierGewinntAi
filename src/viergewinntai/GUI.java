@@ -47,7 +47,7 @@ public class GUI {
     public void initialize() {
 
         VierGewinntAi.mainGameEngine.setPlayerOneHuman(true);
-        VierGewinntAi.mainGameEngine.setPlayerTwoHuman(false);
+        VierGewinntAi.mainGameEngine.setPlayerTwoHuman(true);
 
         showField();
     }

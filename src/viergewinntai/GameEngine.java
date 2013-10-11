@@ -93,6 +93,8 @@ public class GameEngine {
             }
             VierGewinntAi.mainGUI.showPlayerTurnMessage();
             
+            new ArtificialIntelligence().evaluate(playingField, playerTurn);
+            
                         
             if (!playerHuman[playerTurn-1]){
                 startAi();
