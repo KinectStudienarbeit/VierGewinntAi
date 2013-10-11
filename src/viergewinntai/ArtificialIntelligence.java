@@ -9,17 +9,24 @@ import java.util.LinkedList;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author rusinda
  */
 public class ArtificialIntelligence {
-
-    private final int ALPHABETADEPTH = 3;
+    
+    private static int counter = 0;
+    public final int THIS_PLAYER;
+    private final int ALPHABETADEPTH = 6;
     private int[][] field;
     private int[][] processingField;
-    private int heuristicVals[][] = {{3, 4, 5, 5, 4, 3}, {4, 6, 8, 8, 6, 4}, {5, 8, 11, 11, 8, 5}, {7, 10, 13, 13, 10, 7}, {5, 8, 11, 11, 8, 5}, {4, 6, 8, 8, 6, 4}, {3, 4, 5, 5, 4, 3}};
+//    private int heuristicVals[][] = {{3, 4, 5, 5, 4, 3}, {4, 6, 8, 8, 6, 4}, {5, 8, 11, 11, 8, 5}, {7, 10, 13, 13, 10, 7}, {5, 8, 11, 11, 8, 5}, {4, 6, 8, 8, 6, 4}, {3, 4, 5, 5, 4, 3}};
+    
+    public ArtificialIntelligence(int thisPlayer){
+        this.THIS_PLAYER = thisPlayer;        
+    }
 
     public void startAi() {
 
@@ -31,7 +38,7 @@ public class ArtificialIntelligence {
         field = VierGewinntAi.mainGameEngine.getPlayingField();
         processingField = VierGewinntAi.cloneArray((field));
 
-        AlphaBetaTree alphaBetaTree = new AlphaBetaTree(field, ALPHABETADEPTH, heuristicVals);
+        AlphaBetaTree alphaBetaTree = new AlphaBetaTree(field, ALPHABETADEPTH, THIS_PLAYER);
 
 
 
@@ -70,7 +77,7 @@ public class ArtificialIntelligence {
 
     }
 
-    public int evaluate(int[][] field, int player) {
+    public static int evaluate(int[][] field, int player) {
 
         int[][] evals = {{0, 0}, {0, 0}, {0, 0}, {0, 0}};
 
@@ -79,618 +86,259 @@ public class ArtificialIntelligence {
                 if (field[column][row] == 0) {
                     break;
                 }
+                
+                /*
+                 * ###########################################
+                 * ########## all the "usual cases" ##########
+                 * ###########################################
+                 */
 
-                int currColumn;
-                int currRow;
+                for (int i = 0; i < 4; i++) {
+                    if (evalHelp(field, column, row, i + 1, Mode.LEFT)) {
+                        evals[i][field[column][row] - 1]++;
+//                        System.out.println(column + " " + row + " " + (i + 1) + "o4 left");
+                    }
+                    if (evalHelp(field, column, row, i + 1, Mode.LEFT_UP)) {
+                        evals[i][field[column][row] - 1]++;
+//                        System.out.println(column + " " + row + " " + (i + 1) + "o4 leftup");
+                    }
+                    if (evalHelp(field, column, row, i + 1, Mode.UP)) {
+                        evals[i][field[column][row] - 1]++;
+//                        System.out.println(column + " " + row + " " + (i + 1) + "o4 up");
+                    }
+                    if (evalHelp(field, column, row, i + 1, Mode.RIGHT_UP)) {
+                        evals[i][field[column][row] - 1]++;
+//                        System.out.println(column + " " + row + " " + (i + 1) + "o4 rightup");
+                    }
+                    if (evalHelp(field, column, row, i + 1, Mode.RIGHT)) {
+                        evals[i][field[column][row] - 1]++;
+//                        System.out.println(column + " " + row + " " + (i + 1) + "o4 right");
+                    }
+                    if (evalHelp(field, column, row, i + 1, Mode.LEFT_DOWN)) {
+                        evals[i][field[column][row] - 1]++;
+//                        System.out.println(column + " " + row + " " + (i + 1) + "o4 leftdown");
+                    }
+                    if (evalHelp(field, column, row, i + 1, Mode.RIGHT_DOWN)) {
+                        evals[i][field[column][row] - 1]++;
+//                        System.out.println(column + " " + row + " " + (i + 1) + "o4 rightdown");
+                    }
+                }
 
                 /*
-                 * #####################################
-                 * ############# 1 out of 4 ############
-                 * #####################################
+                 * #################################
+                 * ####### 'Special cases' #########
+                 * #################################
                  */
-                {
-                    //up
-                    if (row < 3 && field[column][row + 1] == 0) {
+                
+                //00x0
+                if (column > 1 && column < 6) {
+                    if (field[column - 2][row] == 0 && field[column - 1][row] == 0 && field[column + 1][row] == 0) {
                         evals[0][field[column][row] - 1]++;
-                        System.out.println(column + " " + row + " 1o4 up");
-                    }
-                    //left
-                    if (column > 2) {
-                        currColumn = column - 1;
-                        currRow = row;
-                        int i = 0;
-                        while (i < 3 && field[currColumn][currRow] == 0) {
-                            i++;
-                            currColumn--;
-                        }
-                        if (i == 3) {
-                            evals[0][field[column][row] - 1]++;
-                            System.out.println(column + " " + row + " 1o4 left");
-                        }
-                    }
-                    //right
-                    if (column < 4) {
-                        currColumn = column + 1;
-                        currRow = row;
-                        int i = 0;
-                        while (i < 3 && field[currColumn][currRow] == 0) {
-                            i++;
-                            currColumn++;
-                        }
-                        if (i == 3) {
-                            evals[0][field[column][row] - 1]++;
-                            System.out.println(column + " " + row + " 1o4 right");
-                        }
-                    }
-                    //up-left
-                    if (column > 2 && row < 3) {
-                        currColumn = column - 1;
-                        currRow = row + 1;
-                        int i = 0;
-                        while (i < 3 && field[currColumn][currRow] == 0) {
-                            i++;
-                            currColumn--;
-                            currRow++;
-                        }
-                        if (i == 3) {
-                            evals[0][field[column][row] - 1]++;
-                            System.out.println(column + " " + row + " 1o4 up-left");
-                        }
-                    }
-                    //up-right
-                    if (column < 4 && row < 3) {
-                        currColumn = column + 1;
-                        currRow = row + 1;
-                        int i = 0;
-                        while (i < 3 && field[currColumn][currRow] == 0) {
-                            i++;
-                            currColumn++;
-                            currRow++;
-                        }
-                        if (i == 3) {
-                            evals[0][field[column][row] - 1]++;
-                            System.out.println(column + " " + row + " 1o4 up-right");
-                        }
-                    }
-                    //down-left
-                    if (column > 2 && row > 2) {
-                        currColumn = column - 1;
-                        currRow = row + 1;
-                        int i = 0;
-                        while (i < 3 && field[currColumn][currRow] == 0) {
-                            i++;
-                            currColumn--;
-                            currRow--;
-                        }
-                        if (i == 3) {
-                            evals[0][field[column][row] - 1]++;
-                            System.out.println(column + " " + row + " 1o4 up-left");
-                        }
-                    }
-                    //down-right
-                    if (column < 4 && row > 2) {
-                        currColumn = column + 1;
-                        currRow = row + 1;
-                        int i = 0;
-                        while (i < 3 && field[currColumn][currRow] == 0) {
-                            i++;
-                            currColumn++;
-                            currRow--;
-                        }
-                        if (i == 3) {
-                            evals[0][field[column][row] - 1]++;
-                            System.out.println(column + " " + row + " 1o4 up-right");
-                        }
-                    }
-                    //00x0
-                    if (column > 1 && column < 6) {
-                        if (field[column - 2][row] == 0 && field[column - 1][row] == 0 && field[column + 1][row] == 0) {
-                            evals[0][field[column][row] - 1]++;
-                            System.out.println(column + " " + row + " 1o4 00x0");
-                        }
-                    }
-                    //0x00
-                    if (column > 0 && column < 5) {
-                        if (field[column - 1][row] == 0 && field[column + 1][row] == 0 && field[column + 2][row] == 0) {
-                            evals[0][field[column][row] - 1]++;
-                            System.out.println(column + " " + row + " 1o4 0x00");
-                        }
-                    }
-                    //00x0 diagonal left up
-                    if (column > 1 && column < 6 && row > 0 && row < 4) {
-                        if (field[column - 2][row + 2] == 0 && field[column - 1][row + 1] == 0 && field[column + 1][row - 1] == 0) {
-                            evals[0][field[column][row] - 1]++;
-                            System.out.println(column + " " + row + " 1o4 00x0 diagleftup");
-                        }
-                    }
-                    //0x00 diagonal left up
-                    if (column > 0 && column < 5 && row > 1 && row < 5) {
-                        if (field[column - 1][row + 1] == 0 && field[column + 1][row - 1] == 0 && field[column + 2][row - 2] == 0) {
-                            evals[0][field[column][row] - 1]++;
-                            System.out.println(column + " " + row + " 1o4 0x00diagleftup");
-                        }
-                    }
-                    //00x0 diagonal right up
-                    if (column > 1 && column < 6 && row > 1 && row < 5) {
-                        if (field[column - 2][row - 2] == 0 && field[column - 1][row - 1] == 0 && field[column + 1][row + 1] == 0) {
-                            evals[0][field[column][row] - 1]++;
-                            System.out.println(column + " " + row + " 1o4 00x0diagrightup");
-                        }
-                    }
-                    //0x00 diagonal right up
-                    if (column > 0 && column < 5 && row > 0 && row < 4) {
-                        if (field[column - 1][row - 1] == 0 && field[column + 1][row + 1] == 0 && field[column + 2][row + 2] == 0) {
-                            evals[0][field[column][row] - 1]++;
-                            System.out.println(column + " " + row + " 1o4 0x00diagrightup");
-                        }
+//                        System.out.println(column + " " + row + " 1o4 00x0");
                     }
                 }
-
-                /*
-                 * #####################################
-                 * ############# 2 out of 4 ############
-                 * #####################################
-                 */
-                {
-                    //up
-                    if (row < 3 && field[column][row + 1] == field[column][row] && field[column][row + 2] == 0) {
+                //0x00
+                if (column > 0 && column < 5) {
+                    if (field[column - 1][row] == 0 && field[column + 1][row] == 0 && field[column + 2][row] == 0) {
+                        evals[0][field[column][row] - 1]++;
+//                        System.out.println(column + " " + row + " 1o4 0x00");
+                    }
+                }
+                //00x0 diagonal left up
+                if (column > 1 && column < 6 && row > 0 && row < 4) {
+                    if (field[column - 2][row + 2] == 0 && field[column - 1][row + 1] == 0 && field[column + 1][row - 1] == 0) {
+                        evals[0][field[column][row] - 1]++;
+//                        System.out.println(column + " " + row + " 1o4 00x0 diagleftup");
+                    }
+                }
+                //0x00 diagonal left up
+                if (column > 0 && column < 5 && row > 1 && row < 5) {
+                    if (field[column - 1][row + 1] == 0 && field[column + 1][row - 1] == 0 && field[column + 2][row - 2] == 0) {
+                        evals[0][field[column][row] - 1]++;
+//                        System.out.println(column + " " + row + " 1o4 0x00diagleftup");
+                    }
+                }
+                //00x0 diagonal right up
+                if (column > 1 && column < 6 && row > 1 && row < 5) {
+                    if (field[column - 2][row - 2] == 0 && field[column - 1][row - 1] == 0 && field[column + 1][row + 1] == 0) {
+                        evals[0][field[column][row] - 1]++;
+//                        System.out.println(column + " " + row + " 1o4 00x0diagrightup");
+                    }
+                }
+                
+                //0x00 diagonal right up
+                if (column > 0 && column < 5 && row > 0 && row < 4) {
+                    if (field[column - 1][row - 1] == 0 && field[column + 1][row + 1] == 0 && field[column + 2][row + 2] == 0) {
+                        evals[0][field[column][row] - 1]++;
+//                        System.out.println(column + " " + row + " 1o4 0x00diagrightup");
+                    }
+                }
+                
+                //0xx0
+                if (column > 0 && column < 5) {
+                    if (field[column + 1][row] == field[column][row] && field[column - 1][row] == 0 && field[column + 2][row] == 0) {
                         evals[1][field[column][row] - 1]++;
-                        System.out.println(column + " " + row + " 2o4 up");
-                    }
-
-                    //left
-                    if (column > 2) {
-                        currColumn = column - 1;
-                        currRow = row;
-                        int i = 0;
-                        int addPiece = 0;
-                        while (i <= 2 && addPiece < 2 && column - currColumn < 4) {
-                            if (field[currColumn][currRow] == 0) {
-                                i++;
-                                currColumn--;
-                            } else {
-                                if (field[currColumn][currRow] == field[column][row]) {
-                                    addPiece++;
-                                    currColumn--;
-                                } else {
-                                    break;
-                                }
-                            }
-                        }
-                        if(addPiece == 1 && i >= 2){
-                            evals[1][field[column][row]-1]++;
-                            System.out.println(column + " " + row + " 2o4 left");
-                        }
-                    }
-                    //right
-                    if(column < 4){
-                        currColumn = column + 1;
-                        currRow = row;
-                        int i = 0;
-                        int addPiece = 0;
-                        while (i <= 2 && addPiece < 2 && currColumn - column < 4) {
-                            if (field[currColumn][currRow] == 0) {
-                                i++;
-                                currColumn++;
-                            } else {
-                                if (field[currColumn][currRow] == field[column][row] && currColumn - column !=3) {
-                                    addPiece++;
-                                    currColumn++;
-                                } else {
-                                    break;
-                                }
-                            }
-                        }
-                        if (i == 2 && addPiece == 1) {
-                            evals[1][field[column][row] - 1]++;
-                            System.out.println(column + " " + row + " 2o4 right");
-                        }
-                    }
-                    //0xx0
-                    if(column > 0 && column<6){
-                        if(field[column+1][row] == field[column][row] && field[column-1][row] == 0 && field[column+2][row] == 0){
-                            evals[1][field[column][row]-1]++;
-                            System.out.println(column + " " + row + " 2o4 0xx0");
-                        }
-                    }
-                    //up-left
-                    if(column > 2 && row < 3){
-                        currColumn = column - 1;
-                        currRow = row + 1;
-                        int i = 0;
-                        int addPiece = 0;
-                        while (i <= 2 && addPiece < 2 && currColumn>=0 && column - currColumn < 4) {
-                            if (field[currColumn][currRow] == 0) {
-                                i++;
-                                currColumn--;
-                                currRow++;
-                            } else {
-                                if (field[currColumn][currRow] == field[column][row]) {
-                                    addPiece++;
-                                    currColumn--;
-                                    currRow++;
-                                } else {
-                                    break;
-                                }
-                            }
-                        }
-                        if(addPiece == 1 && i >= 2){
-                            evals[1][field[column][row]-1]++;
-                            System.out.println(column + " " + row + " 2o4 up-left");
-                        }
-                    }
-                    //up-right
-                    if(column < 4 && row < 3){
-                        currColumn = column + 1;
-                        currRow = row + 1;
-                        int i = 0;
-                        int addPiece = 0;
-                        while (i <= 2 && addPiece < 2 && currColumn>=0 && currColumn - column < 4) {
-                            if (field[currColumn][currRow] == 0) {
-                                i++;
-                                currColumn++;
-                                currRow++;
-                            } else {
-                                if (field[currColumn][currRow] == field[column][row]) {
-                                    addPiece++;
-                                    currColumn++;
-                                    currRow++;
-                                } else {
-                                    break;
-                                }
-                            }
-                        }
-                        if(addPiece == 1 && i >= 2){
-                            evals[1][field[column][row]-1]++;
-                            System.out.println(column + " " + row + " 2o4 up-left");
-                        }
-                    }
-                    //down-left
-                    if(column > 2 && row > 2){
-                        currColumn = column - 1;
-                        currRow = row - 1;
-                        int i = 0;
-                        int addPiece = 0;
-                        while (i <= 2 && addPiece < 2 && currColumn>=0 && column - currColumn < 4) {
-                            if (field[currColumn][currRow] == 0) {
-                                i++;
-                                currColumn--;
-                                currRow--;
-                            } else {
-                                if (field[currColumn][currRow] == field[column][row] && column - currColumn != 3) {
-                                    addPiece++;
-                                    currColumn--;
-                                    currRow--;
-                                } else {
-                                    break;
-                                }
-                            }
-                        }
-                        if(addPiece == 1 && i >= 2){
-                            evals[1][field[column][row]-1]++;
-                            System.out.println(column + " " + row + " 2o4 down-left");
-                        }
-                    }
-                    //down-right
-                    if(column < 4 && row > 2){
-                        currColumn = column + 1;
-                        currRow = row - 1;
-                        int i = 0;
-                        int addPiece = 0;
-                        while (i <= 2 && addPiece < 2 && currColumn>=0 && currColumn - column < 4) {
-                            if (field[currColumn][currRow] == 0) {
-                                i++;
-                                currColumn++;
-                                currRow--;
-                            } else {
-                                if (field[currColumn][currRow] == field[column][row] && currColumn - column != 3) {
-                                    addPiece++;
-                                    currColumn++;
-                                    currRow--;
-                                } else {
-                                    break;
-                                }
-                            }
-                        }
-                        if(addPiece == 1 && i >= 2){
-                            evals[1][field[column][row]-1]++;
-                            System.out.println(column + " " + row + " 2o4 down-left");
-                        }
-                    }
-                    //0xx0 diagonal left up
-                    if(column > 0 && column < 6 && row > 0 && row < 5){
-                        if(field[column -1][row+1] == field[column][row] && field[column-2][row+2] == 0 && field[column+1][row-1] == 0){
-                            evals[1][field[column][row]-1]++;
-                            System.out.println(column + " " + row + " 2o4 0xx0 diagonalleftup");
-                        }
-                    }
-                    //0xx0 diagonal right up
-                    if(column > 0 && column < 6 && row > 0 && row < 5){
-                        if(field[column +1][row+1] == field[column][row] && field[column+2][row+2] == 0 && field[column-1][row-1] == 0){
-                            evals[1][field[column][row]-1]++;
-                            System.out.println(column + " " + row + " 2o4 0xx0 diagonalrightup");
-                        }
-                    }
-                }
-                
-                /*
-                 * #####################################
-                 * ############# 3 out of 4 ############
-                 * #####################################
-                 */
-                {
-                    //up
-                    if(row < 3){
-                        if(field[column][row+1] == field[column][row] && field[column][row+2] == field[column][row] && field[column][row+3] == 0){
-                            evals[2][field[column][row]-1]++;
-                            System.out.println(column + " " + row + " 3o4 up");
-                        }
-                    }
-                    //left
-                    if (column > 2) {
-                        currColumn = column - 1;
-                        currRow = row;
-                        int i = 0;
-                        int addPiece = 0;
-                        while (i <= 1 && addPiece < 3 && column - currColumn < 4) {
-                            if (field[currColumn][currRow] == 0) {
-                                i++;
-                                currColumn--;
-                            } else {
-                                if (field[currColumn][currRow] == field[column][row]) {
-                                    addPiece++;
-                                    currColumn--;
-                                } else {
-                                    break;
-                                }
-                            }
-                        }
-                        if(addPiece == 2 && i >= 1){
-                            evals[2][field[column][row]-1]++;
-                            System.out.println(column + " " + row + " 3o4 left");
-                        }
-                    }
-                    //right
-                    if (column < 4) {
-                        currColumn = column + 1;
-                        currRow = row;
-                        int i = 0;
-                        int addPiece = 0;
-                        while (i <= 1 && addPiece < 3 && currColumn - column < 4) {
-                            if (field[currColumn][currRow] == 0) {
-                                i++;
-                                currColumn++;
-                            } else {
-                                if (field[currColumn][currRow] == field[column][row] && currColumn - column != 3) {
-                                    addPiece++;
-                                    currColumn++;
-                                } else {
-                                    break;
-                                }
-                            }
-                        }
-                        if(addPiece == 2 && i >= 1){
-                            evals[2][field[column][row]-1]++;
-                            System.out.println(column + " " + row + " 3o4 left");
-                        }
-                    }
-                    //up-left
-                    if(column > 2 && row < 3){
-                        currColumn = column - 1;
-                        currRow = row + 1;
-                        int i = 0;
-                        int addPiece = 0;
-                        while (i <= 1 && addPiece < 3 && currColumn>=0 && column - currColumn < 4) {
-                            if (field[currColumn][currRow] == 0) {
-                                i++;
-                                currColumn--;
-                                currRow++;
-                            } else {
-                                if (field[currColumn][currRow] == field[column][row]) {
-                                    addPiece++;
-                                    currColumn--;
-                                    currRow++;
-                                } else {
-                                    break;
-                                }
-                            }
-                        }
-                        if(addPiece == 2 && i >= 1){
-                            evals[2][field[column][row]-1]++;
-                            System.out.println(column + " " + row + " 304 up-left");
-                        }
-                    }
-                    //up-right
-                    if(column < 4 && row < 3){
-                        currColumn = column + 1;
-                        currRow = row + 1;
-                        int i = 0;
-                        int addPiece = 0;
-                        while (i <= 1 && addPiece < 3 && currColumn>=0 && currColumn - column < 4) {
-                            if (field[currColumn][currRow] == 0) {
-                                i++;
-                                currColumn++;
-                                currRow++;
-                            } else {
-                                if (field[currColumn][currRow] == field[column][row]) {
-                                    addPiece++;
-                                    currColumn++;
-                                    currRow++;
-                                } else {
-                                    break;
-                                }
-                            }
-                        }
-                        if(addPiece == 2 && i >= 1){
-                            evals[2][field[column][row]-1]++;
-                            System.out.println(column + " " + row + " 304 up-left");
-                        }
-                    }
-                    //down-left
-                    if(column > 2 && row > 2){
-                        currColumn = column - 1;
-                        currRow = row - 1;
-                        int i = 0;
-                        int addPiece = 0;
-                        while (i <= 1 && addPiece < 3 && currColumn>=0 && column - currColumn < 4) {
-                            if (field[currColumn][currRow] == 0) {
-                                i++;
-                                currColumn--;
-                                currRow--;
-                            } else {
-                                if (field[currColumn][currRow] == field[column][row] && column - currColumn != 3) {
-                                    addPiece++;
-                                    currColumn--;
-                                    currRow--;
-                                } else {
-                                    break;
-                                }
-                            }
-                        }
-                        if(addPiece == 2 && i >= 1){
-                            evals[2][field[column][row]-1]++;
-                            System.out.println(column + " " + row + " 304 down-left");
-                        }
-                    }
-                    //down-right
-                    if(column < 4 && row > 2){
-                        currColumn = column + 1;
-                        currRow = row - 1;
-                        int i = 0;
-                        int addPiece = 0;
-                        while (i <= 1 && addPiece < 3 && currColumn>=0 && currColumn - column < 4) {
-                            if (field[currColumn][currRow] == 0) {
-                                i++;
-                                currColumn++;
-                                currRow--;
-                            } else {
-                                if (field[currColumn][currRow] == field[column][row] && currColumn - column != 3) {
-                                    addPiece++;
-                                    currColumn++;
-                                    currRow--;
-                                } else {
-                                    break;
-                                }
-                            }
-                        }
-                        if(addPiece == 2 && i >= 1){
-                            evals[2][field[column][row]-1]++;
-                            System.out.println(column + " " + row + " 304 down-left");
-                        }
-                    }
-                }
-                
-                /*
-                 * #####################################
-                 * ############# 4 out of 4 ############
-                 * #####################################
-                 */
-                {
-                    //up
-                    if(row < 3){
-                        int i = 0;
-                        currRow = row+1;
-                        currColumn = column;
-                        while(field[currColumn][currRow] == field[column][row]){
-                            i++;
-                            currRow++;
-                        }
-                        if(i>=3){
-                            evals[3][field[column][row]-1]++;
-                            System.out.println(column + " " + row + " 404 up");
-                        }
-                    }
-                    
-                    //up-right
-                    if(row <3 && column < 4){
-                        int i = 0;
-                        currRow = row+1;
-                        currColumn = column+1;
-                        while(field[currColumn][currRow] == field[column][row]){
-                            i++;
-                            currRow++;
-                            currColumn++;
-                        }
-                        if(i>=3){
-                            evals[3][field[column][row]-1]++;
-                            System.out.println(column + " " + row + " 404 up-right");
-                        }
-                    }
-                    
-                    //right
-                    if(column < 4){
-                        int i = 0;
-                        currRow = row;
-                        currColumn = column+1;
-                        while(field[currColumn][currRow] == field[column][row]){
-                            i++;
-                            currColumn++;
-                        }
-                        if(i>=3){
-                            evals[3][field[column][row]-1]++;
-                            System.out.println(column + " " + row + " 404 right");
-                        }
-                    }
-                    
-                    //down-right
-                    if(row <3 && column < 4){
-                        int i = 0;
-                        currRow = row+1;
-                        currColumn = column-1;
-                        while(field[currColumn][currRow] == field[column][row]){
-                            i++;
-                            currRow--;
-                            currColumn++;
-                        }
-                        if(i>=3){
-                            evals[3][field[column][row]-1]++;
-                            System.out.println(column + " " + row + " 404 down-right");
-                        }
+//                        System.out.println(column + " " + row + " 2o4 0xx0");
                     }
                 }
 
-////                int currPlayer = field[column][row];
-//                int amount;
-//
-//                int currColumn;
-//                int currRow;
-//
-//                amount = 1;
-//                currColumn = column;
-//                currRow = row - 1;
-//                while (currRow >= 0 && currRow < 6 && field[currColumn][currRow] == field[column][row]) {
-//                    amount++;
-//                    currRow--;
-//                }
-//                currColumn = column;
-//                currRow = row + 1;
-//                while (currRow >= 0 && currRow < 6 && field[currColumn][currRow] == field[column][row]) {
-//                    amount++;
-//                    currRow++;
-//                }
-//                if (amount >= 4) {
-//                    evals[3][field[column][row] - 1]++;
-//                } else {
-//                    currRow = row;
-//                    while (row < 6 && field[currColumn][currRow] == field[column][row]) {
-//                        currRow++;
-//                    }
-//                    if(field[currColumn][currRow] !=0){
-//                        break;
-//                    } else {
-//                        if ((6 - currRow + amount) >= 4){
-//                            evals[amount-1][field[column][row]-1]++;
-//                        }
-//                                
-//                    }
-//                    
-//                }
+                //0xx0 diagonal left up
+                if (column > 1 && column < 5 && row > 1 && row < 5) {
+                    if (field[column - 1][row + 1] == field[column][row] && field[column - 2][row + 2] == 0 && field[column + 1][row - 1] == 0) {
+                        evals[1][field[column][row] - 1]++;
+//                        System.out.println(column + " " + row + " 2o4 0xx0 diagonalleftup");
+                    }
+                }
+                //0xx0 diagonal right up
+                if (column > 0 && column < 5 && row > 0 && row < 5) {
+                    if (field[column + 1][row + 1] == field[column][row] && field[column + 2][row + 2] == 0 && field[column - 1][row - 1] == 0) {
+                        evals[1][field[column][row] - 1]++;
+//                        System.out.println(column + " " + row + " 2o4 0xx0 diagonalrightup");
+                    }
+                }
             }
         }
 
-        for(int i= 0; i< 4; i++){
-            System.out.println(Arrays.toString(evals[i]));
+        for (int i = 0; i < 4; i++) {
+//            System.out.println(Arrays.toString(evals[i]));
+
         }
-        return 0;
+        int left;
+        int right;
+        if (player == 1){
+            left = 0;
+            right = 1;
+        } else {
+            left = 1;
+            right = 0;
+        }
+        
+        if(evals[3][left] > 0){
+            return Integer.MAX_VALUE;
+        }
+        if(evals[3][right] > 0){
+            return Integer.MIN_VALUE;
+        }
+        
+        int returnVal = evals[0][left] + evals[1][left] * 10 + evals[2][left] * 100 - evals[0][right] - evals[1][right] * 10 - evals[2][right] * 100;
+//        System.out.println("Field score for player " + player + ": " + returnVal);
+        
+        counter++;
+        System.out.println(counter);
+        
+        return returnVal;
+    }
+
+    private static boolean evalHelp(int[][] field, int column, int row, int outOfFour, Mode mode) {
+
+        int columnMod = 0;
+        int rowMod = 0;
+        boolean shorten = false;
+        int leftBorder = 0;
+        int rightBorder = 0;
+        int lowBorder = 0;
+        int upBorder = 0;
+
+        switch (mode) {
+            case LEFT:
+                columnMod = -1;
+                rowMod = 0;
+                leftBorder = 3;
+                rightBorder = 6;
+                upBorder = 5;
+                lowBorder = 0;
+                break;
+            case LEFT_UP:
+                columnMod = -1;
+                rowMod = +1;
+                leftBorder = 3;
+                rightBorder = 6;
+                upBorder = 2;
+                lowBorder = 0;
+                break;
+            case UP:
+                columnMod = 0;
+                rowMod = +1;
+                leftBorder = 0;
+                rightBorder = 6;
+                upBorder = 2;
+                lowBorder = 0;
+                break;
+            case RIGHT_UP:
+                columnMod = +1;
+                rowMod = +1;
+                leftBorder = 0;
+                rightBorder = 3;
+                upBorder = 2;
+                lowBorder = 0;
+                break;
+            case RIGHT:
+                columnMod = +1;
+                rowMod = 0;
+                leftBorder = 0;
+                rightBorder = 3;
+                upBorder = 5;
+                lowBorder = 0;
+                shorten = true;
+                break;
+            case LEFT_DOWN:
+                columnMod = -1;
+                rowMod = -1;
+                leftBorder = 3;
+                rightBorder = 6;
+                upBorder = 5;
+                lowBorder = 3;
+                shorten = true;
+                break;
+            case RIGHT_DOWN:
+                columnMod = +1;
+                rowMod = -1;
+                leftBorder = 0;
+                rightBorder = 3;
+                upBorder = 5;
+                lowBorder = 3;
+                shorten = true;
+                break;
+        }
+
+        int currColumn = column + columnMod;
+        int currRow = row + rowMod;
+
+        
+        if (column >= leftBorder && column <= rightBorder && row >= lowBorder && row <= upBorder) {
+            int i = 0;
+            int addPiece = 0;
+            int maxI = 4;
+            if (outOfFour == 1) {
+                maxI--;
+            }
+            while (i <= maxI - outOfFour && addPiece < outOfFour && Math.abs(column - currColumn) < 4 && Math.abs(row - currRow) < 4) {
+                if (field[currColumn][currRow] == 0) {
+                    i++;
+                    currColumn += columnMod;
+                    currRow += rowMod;
+
+                } else {
+                    if (field[currColumn][currRow] == field[column][row] && !(shorten && (Math.abs(column - currColumn) == 3 || Math.abs(row - currRow) == 3))) {
+                        addPiece++;
+                        currColumn += columnMod;
+                        currRow += rowMod;
+                    } else {
+                        break;
+                    }
+                }
+            }
+            if (addPiece + 1 == outOfFour && i + outOfFour == 4) {
+                return true;
+            }
+        }
+          
+        return false;
+
+    }
+
+    private enum Mode {
+
+        LEFT, LEFT_UP, UP, RIGHT_UP, RIGHT, RIGHT_DOWN, LEFT_DOWN
     }
 }

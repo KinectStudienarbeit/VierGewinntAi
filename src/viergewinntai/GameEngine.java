@@ -70,16 +70,16 @@ public class GameEngine {
             playingField[column][row] = playerTurn;
             
             for (int aaa = 0; aaa<7; aaa++){
-                System.out.println(Arrays.toString(playingField[aaa]));
+//                System.out.println(Arrays.toString(playingField[aaa]));
             }
             
             VierGewinntAi.mainGUI.showMove(playerTurn, column + 1, row + 1);
             
-            if(checkWin(column, row)){
-                VierGewinntAi.mainGUI.showWinMessage();
-                resetGame();
-                return;
-            }
+//            if(checkWin(column, row)){
+//                VierGewinntAi.mainGUI.showWinMessage();
+//                resetGame();
+//                return;
+//            }
             
             if(checkFull()){
                 VierGewinntAi.mainGUI.showFullMessage();
@@ -93,7 +93,7 @@ public class GameEngine {
             }
             VierGewinntAi.mainGUI.showPlayerTurnMessage();
             
-            new ArtificialIntelligence().evaluate(playingField, playerTurn);
+//            new ArtificialIntelligence().evaluate(playingField, playerTurn);
             
                         
             if (!playerHuman[playerTurn-1]){

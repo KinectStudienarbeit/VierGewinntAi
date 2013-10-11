@@ -47,7 +47,7 @@ public class GUI {
     public void initialize() {
 
         VierGewinntAi.mainGameEngine.setPlayerOneHuman(true);
-        VierGewinntAi.mainGameEngine.setPlayerTwoHuman(true);
+        VierGewinntAi.mainGameEngine.setPlayerTwoHuman(false);
 
         showField();
     }
@@ -71,7 +71,7 @@ public class GUI {
         mainPanel.add(field);
         field.setBounds(PLAYINGFIELDX, PLAYINGFIELDY, myPicture.getWidth(), myPicture.getHeight());
         field.setVisible(true);
-        System.out.println(field.getLocation());
+//        System.out.println(field.getLocation());
 
         RowButton[] buttons = new RowButton[7];
 

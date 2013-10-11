@@ -12,7 +12,7 @@ public class VierGewinntAi {
 
     public static GUI mainGUI = new GUI();
     public static GameEngine mainGameEngine = new GameEngine();
-    public static ArtificialIntelligence[] AI = {new ArtificialIntelligence(), new ArtificialIntelligence()};
+    public static ArtificialIntelligence[] AI = {new ArtificialIntelligence(1), new ArtificialIntelligence(2)};
 
     public static int[][] cloneArray(int[][] toClone) {
 
@@ -21,7 +21,7 @@ public class VierGewinntAi {
             int[] aMatrix = toClone[i];
             int aLength = aMatrix.length;
             myInt[i] = new int[aLength];
-            System.arraycopy(aMatrix, 0, myInt[i], 0, aLength);
+//            System.arraycopy(aMatrix, 0, myInt[i], 0, aLength);
         }
 
         return myInt;
