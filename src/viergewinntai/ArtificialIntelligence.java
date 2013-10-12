@@ -4,6 +4,7 @@
  */
 package viergewinntai;
 
+import com.sun.media.sound.AlawCodec;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Random;
@@ -19,7 +20,7 @@ public class ArtificialIntelligence {
     
     private static int counter = 0;
     public final int THIS_PLAYER;
-    private final int ALPHABETADEPTH = 6;
+    private final int ALPHABETADEPTH = 3;
     private int[][] field;
     private int[][] processingField;
 //    private int heuristicVals[][] = {{3, 4, 5, 5, 4, 3}, {4, 6, 8, 8, 6, 4}, {5, 8, 11, 11, 8, 5}, {7, 10, 13, 13, 10, 7}, {5, 8, 11, 11, 8, 5}, {4, 6, 8, 8, 6, 4}, {3, 4, 5, 5, 4, 3}};
@@ -45,9 +46,9 @@ public class ArtificialIntelligence {
 
     }
 
-    private int max(LinkedList<AlphaBetaTree.Node> nodes) {
+    public static int max(LinkedList<AlphaBetaTree.Node> nodes) {
         int returnVal = 0;
-
+        // nodes muss die 7 (Kind)Knoten enthalten, dessen Max/Min Wert gefunden werden muss
         for (int i = 0; i < nodes.size(); i++) {
             if (nodes.get(i).value > returnVal) {
                 returnVal = nodes.get(i).value;
@@ -57,7 +58,7 @@ public class ArtificialIntelligence {
         return returnVal;
     }
 
-    private int min(LinkedList<AlphaBetaTree.Node> nodes) {
+    public static int min(LinkedList<AlphaBetaTree.Node> nodes) {
         int returnVal = 0;
 
         for (int i = 0; i < nodes.size(); i++) {

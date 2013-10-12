@@ -16,7 +16,13 @@ public class AlphaBetaTree {
 
     public AlphaBetaTree(int[][] field, int depth, int player) {
 
-          recTree(field, depth, 1, data, player);
+        recTree(field, depth, 1, data, player);
+
+        recMinMax(data, depth - 1, player);
+
+        int playColumn = data.value;
+        // nun prüfen in welchem Kindknoten von Data data.value steht --> Spalte, die man spielen soll
+        // for Schleife
 
 //        for (int column1 = 0; column1 < 7; column1++) {
 //            int[][] processingField1 = VierGewinntAi.cloneArray((field));   
@@ -61,61 +67,103 @@ public class AlphaBetaTree {
     }
 
     public void recTree(int[][] processingField_above, int depth, int depth_current, Node currentNode, int player) {
-        // go through columns from left to right
-        for (int column = 0; column < 7; column++) {
-            int[][] processingField_current = VierGewinntAi.cloneArray((processingField_above));
+        
+        int[][] processingField_current;
+        int nextPlayer = 0;
 
-            // go through rows of the current column until a free space to set a new coin
-            // in the end "row" represents the coin that was set
-            int row = 0;
-            while (row < 6 && processingField_current[column][row] != 0) {
-                row++;
-            }
+        // End-Kondition für Rekursion. Dann wird aktuelle Node mit ihrem Tiefenwert und Score bestückt
+        if (depth == depth_current) {
+            processingField_current = VierGewinntAi.cloneArray((processingField_above));
 
-            //detect if the column is full and skip
-            if (row == 5) {
-                continue;
-            }
-
-            // depending on current depth player 1 or player 2 is chosen
-            // depth is odd (1,3,5,...) = current player
-            // depth is even (2,4,6,...) = opponent
-            int nextPiece;
-            if (player == 1) {
-                nextPiece = depth_current % 2 + 1;
-            } else {
-                nextPiece = 2 - depth_current % 2;
-            }
-//            processingField_current[column][row] = depth_current % 2 +1;
-            processingField_current[column][row] = nextPiece;
-
-            // only in final depth:
-            // Evaluation of processingField_current so that heurVals will be filled
-            if (depth == depth_current) {
-
-//                data.add(new Node((heurVals[column][row])));
+            //Hier evaluate aufrufen, um werte zu bekommen
+            //keine neue Node nötig, weil vorher (vor Aufruf des nächsten RekursionsStep) ja schon erstellt
 //                currentNode.children.add(new Node());
+//                currentNode.children.getLast().nodeDepth = depth_current;
+//                currentNode.children.getLast().value = ArtificialIntelligence.evaluate(processingField_current, player);
+//                currentNode.children.add(new Node());
+            currentNode.nodeDepth = depth_current;
+// TO DO Player muss wechseln zw. Zügen --> Modulo
+            currentNode.value = ArtificialIntelligence.evaluate(processingField_current, player);
+        } // next depth-step
+        else {
 
-                //Hier evaluate aufrufen, um werte zu bekommen
+            // go through columns from left to right
+            for (int column = 0; column < 7; column++) {
+                // processingField zurückseten von vorigem Rekursionsschritt
+                processingField_current = VierGewinntAi.cloneArray((processingField_above));
+
+                // go through rows of the current column until a free space to set a new coin
+                // in the end "row" represents the coin that was set
+                int row = 0;
+                while (row < 6 && processingField_current[column][row] != 0) {
+                    row++;
+                }
+
+                //detect if the column is full and skip  
+                if (row == 5) {
+                    continue;
+                }
+
+                // depending on current depth player 1 or player 2 is chosen
+                // depth is odd (1,3,5,...) = current player
+                // depth is even (2,4,6,...) = opponent
+
+//                int nextPiece;
+//            if (player == 1) {
+//                nextPiece = depth_current % 2 + 1;
+//            } else {
+// Was wolltest du hiermit Dawid?^^
+//                nextPiece = 2 - depth_current % 2;
+//            }
+//            processingField_current[column][row] = depth_current % 2 +1;
+//                processingField_current[column][row] = nextPiece;
+                processingField_current[column][row] = player;
+              
+                // save current depth value to orientate in which tree depth it is
+                currentNode.nodeDepth = depth_current;
+
+                // new children for currentNode to operate the next recursion step
                 currentNode.children.add(new Node());
-                currentNode.children.getLast().value = ArtificialIntelligence.evaluate(processingField_current, player);
-            } // next depth-step
-            else {
-//                depth_current++;
 
-                //hier 7 kindnodes erzeugen und für jede Kindnode funktion rekursiv aufrufen
+                if (player == 1){
+                    nextPlayer = 2;
+                } else{
+                    nextPlayer = 1;
+                }
 
-                currentNode.children.add(new Node());
-                AlphaBetaTree.this.recTree(processingField_current, depth, depth_current + 1, currentNode.children.getLast(), player);
-//                depth_current--;
+                AlphaBetaTree.this.recTree(processingField_current, depth, depth_current + 1, currentNode.children.getLast(), nextPlayer);
             }
         }
+
+    }
+
+    public void recMinMax(Node currentNode, int depth_lastParentNode, int player) {
+        // depth_lpnode = depth of (l)ast (p)arent node
+
+        // until last node with children (max_depth -1 means depth_lpnode = last parent node)
+        if (currentNode.nodeDepth != depth_lastParentNode) {
+            for (int i = 0; i < 7; i++) {
+                recMinMax(currentNode.children.get(i), depth_lastParentNode, player);
+            }
+        }
+        // now we are in right depth. currentNode has 7 children
+
+        int minOrMax = currentNode.nodeDepth % 2;
+        if (minOrMax == 1) {
+            // odd depth value --> maximize
+            currentNode.value = ArtificialIntelligence.max(currentNode.children);
+        } else {
+            // even depth value --> minimize
+            currentNode.value = ArtificialIntelligence.min(currentNode.children);
+        }
+
 
     }
 
     public class Node {
 
         public int value;
+        public int nodeDepth;
         public LinkedList<Node> children = new LinkedList<>();
 
         public void addChild(Node n) {

@@ -21,7 +21,7 @@ public class VierGewinntAi {
             int[] aMatrix = toClone[i];
             int aLength = aMatrix.length;
             myInt[i] = new int[aLength];
-//            System.arraycopy(aMatrix, 0, myInt[i], 0, aLength);
+            System.arraycopy(aMatrix, 0, myInt[i], 0, aLength);
         }
 
         return myInt;
