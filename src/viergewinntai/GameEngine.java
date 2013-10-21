@@ -75,11 +75,11 @@ public class GameEngine {
             
             VierGewinntAi.mainGUI.showMove(playerTurn, column + 1, row + 1);
             
-//            if(checkWin(column, row)){
-//                VierGewinntAi.mainGUI.showWinMessage();
-//                resetGame();
-//                return;
-//            }
+            if(checkWin(column, row)){
+                VierGewinntAi.mainGUI.showWinMessage();
+                resetGame();
+                return;
+            }
             
             if(checkFull()){
                 VierGewinntAi.mainGUI.showFullMessage();

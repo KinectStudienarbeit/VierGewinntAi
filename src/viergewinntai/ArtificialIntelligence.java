@@ -20,7 +20,7 @@ public class ArtificialIntelligence {
     
     private static int counter = 0;
     public final int THIS_PLAYER;
-    private final int ALPHABETADEPTH = 3;
+    private final int ALPHABETADEPTH = 4;
     private int[][] field;
     private int[][] processingField;
 //    private int heuristicVals[][] = {{3, 4, 5, 5, 4, 3}, {4, 6, 8, 8, 6, 4}, {5, 8, 11, 11, 8, 5}, {7, 10, 13, 13, 10, 7}, {5, 8, 11, 11, 8, 5}, {4, 6, 8, 8, 6, 4}, {3, 4, 5, 5, 4, 3}};
@@ -40,6 +40,7 @@ public class ArtificialIntelligence {
         processingField = VierGewinntAi.cloneArray((field));
 
         AlphaBetaTree alphaBetaTree = new AlphaBetaTree(field, ALPHABETADEPTH, THIS_PLAYER);
+        VierGewinntAi.mainGameEngine.tryMove(alphaBetaTree.getMove());
 
 
 
@@ -47,22 +48,25 @@ public class ArtificialIntelligence {
     }
 
     public static int max(LinkedList<AlphaBetaTree.Node> nodes) {
-        int returnVal = 0;
+        int returnVal = nodes.getFirst().value;
         // nodes muss die 7 (Kind)Knoten enthalten, dessen Max/Min Wert gefunden werden muss
         for (int i = 0; i < nodes.size(); i++) {
-            if (nodes.get(i).value > returnVal) {
+            if (!nodes.get(i).empty && nodes.get(i).value > returnVal) {
                 returnVal = nodes.get(i).value;
             }
         }
 
+        if(returnVal == Integer.MAX_VALUE){
+            int test = 0;
+        }
         return returnVal;
     }
 
     public static int min(LinkedList<AlphaBetaTree.Node> nodes) {
-        int returnVal = 0;
+        int returnVal = nodes.getFirst().value;
 
         for (int i = 0; i < nodes.size(); i++) {
-            if (nodes.get(i).value < returnVal) {
+            if (!nodes.get(i).empty && nodes.get(i).value < returnVal) {
                 returnVal = nodes.get(i).value;
             }
         }
@@ -184,18 +188,28 @@ public class ArtificialIntelligence {
                 }
 
                 //0xx0 diagonal left up
-                if (column > 1 && column < 5 && row > 1 && row < 5) {
+                try{
+                if (column > 1 && column < 5 && row > 1 && row < 4) {
                     if (field[column - 1][row + 1] == field[column][row] && field[column - 2][row + 2] == 0 && field[column + 1][row - 1] == 0) {
                         evals[1][field[column][row] - 1]++;
 //                        System.out.println(column + " " + row + " 2o4 0xx0 diagonalleftup");
                     }
                 }
+                } catch (Exception e){
+                    e.printStackTrace();
+                    int ab = 0;
+                }
                 //0xx0 diagonal right up
-                if (column > 0 && column < 5 && row > 0 && row < 5) {
+                try{
+                if (column > 0 && column < 5 && row > 0 && row < 4) {
                     if (field[column + 1][row + 1] == field[column][row] && field[column + 2][row + 2] == 0 && field[column - 1][row - 1] == 0) {
                         evals[1][field[column][row] - 1]++;
 //                        System.out.println(column + " " + row + " 2o4 0xx0 diagonalrightup");
                     }
+                }
+                } catch(Exception e){
+                    e.printStackTrace();
+                    int abc = 0;
                 }
             }
         }
@@ -224,8 +238,16 @@ public class ArtificialIntelligence {
         int returnVal = evals[0][left] + evals[1][left] * 10 + evals[2][left] * 100 - evals[0][right] - evals[1][right] * 10 - evals[2][right] * 100;
 //        System.out.println("Field score for player " + player + ": " + returnVal);
         
-        counter++;
-        System.out.println(counter);
+//        counter++;
+//        System.out.println(counter);
+        
+//        for(int i = 5; i >=0; i--){
+//            for(int j = 0; j<7 ; j++){
+//                System.out.print(field[j][i]);
+//            }
+//            System.out.println("");
+//        }
+//        System.out.println(returnVal);
         
         return returnVal;
     }

@@ -13,16 +13,28 @@ import java.util.LinkedList;
 public class AlphaBetaTree {
 
     private Node data = new Node();
+    private int playColumn;
+    
+    public int getMove(){
+        return playColumn;
+    }
 
     public AlphaBetaTree(int[][] field, int depth, int player) {
 
         recTree(field, depth, 1, data, player);
 
         recMinMax(data, depth - 1, player);
+        
+        int test = 0;
 
-        int playColumn = data.value;
         // nun prüfen in welchem Kindknoten von Data data.value steht --> Spalte, die man spielen soll
         // for Schleife
+        for(int i = 0; i<data.children.size(); i++){
+            if(data.children.get(i).value == data.value){
+                playColumn = i;
+                break;
+            }
+        }
 
 //        for (int column1 = 0; column1 < 7; column1++) {
 //            int[][] processingField1 = VierGewinntAi.cloneArray((field));   
@@ -62,7 +74,6 @@ public class AlphaBetaTree {
 //            }
 //        }
 
-        int test = 0;
 
     }
 
@@ -100,7 +111,9 @@ public class AlphaBetaTree {
                 }
 
                 //detect if the column is full and skip  
-                if (row == 5) {
+                if (row > 5) {
+                    currentNode.addChild(new Node());
+                    currentNode.children.getLast().empty = true;
                     continue;
                 }
 
@@ -108,16 +121,16 @@ public class AlphaBetaTree {
                 // depth is odd (1,3,5,...) = current player
                 // depth is even (2,4,6,...) = opponent
 
-//                int nextPiece;
-//            if (player == 1) {
-//                nextPiece = depth_current % 2 + 1;
-//            } else {
-// Was wolltest du hiermit Dawid?^^
-//                nextPiece = 2 - depth_current % 2;
-//            }
+                int nextPiece;
+                if (player == 2) {
+                    nextPiece = depth_current % 2 + 1;
+                } else {
+//     Was wolltest du hiermit Dawid?^^
+                    nextPiece = 2 - depth_current % 2;
+                }
 //            processingField_current[column][row] = depth_current % 2 +1;
-//                processingField_current[column][row] = nextPiece;
-                processingField_current[column][row] = player;
+                processingField_current[column][row] = nextPiece;
+//                processingField_current[column][row] = player;
               
                 // save current depth value to orientate in which tree depth it is
                 currentNode.nodeDepth = depth_current;
@@ -125,13 +138,13 @@ public class AlphaBetaTree {
                 // new children for currentNode to operate the next recursion step
                 currentNode.children.add(new Node());
 
-                if (player == 1){
-                    nextPlayer = 2;
-                } else{
-                    nextPlayer = 1;
-                }
+//                if (player == 1){
+//                    nextPlayer = 2;
+//                } else{
+//                    nextPlayer = 1;
+//                }
 
-                AlphaBetaTree.this.recTree(processingField_current, depth, depth_current + 1, currentNode.children.getLast(), nextPlayer);
+                AlphaBetaTree.this.recTree(processingField_current, depth, depth_current + 1, currentNode.children.getLast(), player);
             }
         }
 
@@ -142,10 +155,15 @@ public class AlphaBetaTree {
 
         // until last node with children (max_depth -1 means depth_lpnode = last parent node)
         if (currentNode.nodeDepth != depth_lastParentNode) {
-            for (int i = 0; i < 7; i++) {
+            for (int i = 0; i < currentNode.children.size(); i++) {
                 recMinMax(currentNode.children.get(i), depth_lastParentNode, player);
             }
         }
+        
+        if(currentNode.empty){
+            return;
+        }
+        
         // now we are in right depth. currentNode has 7 children
 
         int minOrMax = currentNode.nodeDepth % 2;
@@ -164,6 +182,7 @@ public class AlphaBetaTree {
 
         public int value;
         public int nodeDepth;
+        public boolean empty = false;
         public LinkedList<Node> children = new LinkedList<>();
 
         public void addChild(Node n) {
