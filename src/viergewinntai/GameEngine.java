@@ -4,10 +4,6 @@
  */
 package viergewinntai;
 
-import java.io.Console;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-
 /**
  * Contains all game logic
  * @author rusinda
@@ -61,6 +57,7 @@ public class GameEngine {
     public void tryMove(int column){
         if(!checkMove(column)) {
             VierGewinntAi.mainGUI.showInvalidMoveMessage();
+            System.out.println("Player: " + playerTurn + " Column: " + column);
         } else {
             int i = 0;
             while(playingField[column][i] != 0){
@@ -75,7 +72,7 @@ public class GameEngine {
             
             VierGewinntAi.mainGUI.showMove(playerTurn, column + 1, row + 1);
             
-            if(checkWin(column, row)){
+            if(checkWin(playingField, column, row)){
                 VierGewinntAi.mainGUI.showWinMessage();
                 resetGame();
                 return;
@@ -140,7 +137,7 @@ public class GameEngine {
      * Checks if the turn taken resulted in a player winning the game
      * @return
      */
-    public boolean checkWin(int column, int row){
+    public boolean checkWin(int[][] field, int column, int row){
         
         int sum;
         int row_;
@@ -149,12 +146,12 @@ public class GameEngine {
         sum = 1;
         row_ = row;
         column_ = column -1;
-        while(column_ >= 0 && playingField[column_][row_] == playerTurn){
+        while(column_ >= 0 && field[column_][row_] == field[column][row]){
             sum++;
             column_ --;
         }
         column_ = column +1;
-        while(column_ < 7 && playingField[column_][row_] == playerTurn){
+        while(column_ < 7 && field[column_][row_] == field[column][row]){
             sum++;
             column_ ++;
         }
@@ -163,12 +160,12 @@ public class GameEngine {
         sum = 1;
         row_ = row -1;
         column_ = column;
-        while(row_ >= 0 && playingField[column_][row_] == playerTurn){
+        while(row_ >= 0 && field[column_][row_] == field[column][row]){
             sum++;
             row_ --;
         }
         row_ = row +1;
-        while(row_ < 6 && playingField[column_][row_] == playerTurn){
+        while(row_ < 6 && field[column_][row_] == field[column][row]){
             sum++;
             row_ ++;
         }
@@ -177,14 +174,14 @@ public class GameEngine {
         sum = 1;
         row_ = row -1;
         column_ = column -1;
-        while(column_ >= 0 && row_ >= 0 && playingField[column_][row_] == playerTurn){
+        while(column_ >= 0 && row_ >= 0 && field[column_][row_] == field[column][row]){
             sum++;
             column_ --;
             row_ --;
         }
         row_ = row +1;
         column_ = column +1;
-        while(column_ < 7 && row_< 6 && playingField[column_][row_] == playerTurn){
+        while(column_ < 7 && row_< 6 && field[column_][row_] == field[column][row]){
             sum++;
             column_ ++;
             row_++;
@@ -194,14 +191,14 @@ public class GameEngine {
         sum = 1;
         row_ = row +1;
         column_ = column -1;
-        while(column_ >= 0 && row_ < 6 && playingField[column_][row_] == playerTurn){
+        while(column_ >= 0 && row_ < 6 && field[column_][row_] == field[column][row]){
             sum++;
             column_ --;
             row_ ++;
         }
         row_ = row -1;
         column_ = column +1;
-        while(column_ < 7 && row_>=0 && playingField[column_][row_] == playerTurn){
+        while(column_ < 7 && row_>=0 && field[column_][row_] == field[column][row]){
             sum++;
             column_ ++;
             row_--;
@@ -209,6 +206,21 @@ public class GameEngine {
         if(sum >= 4) return true;
         
         
+        return false;
+    }
+    
+    public boolean checkWin(int[][] field){
+        
+        for(int i = 0; i< field.length; i++){
+            for(int j = 0; j<field[i].length; j++){
+                if(field[i][j] == 0){
+                    break;
+                }
+                if(checkWin(field, i, j)){
+                    return true;
+                }
+            }
+        }
         return false;
     }
     

@@ -4,6 +4,8 @@
  */
 package viergewinntai;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Dawid
@@ -36,7 +38,7 @@ public class VierGewinntAi {
         mainGUI.initialize();
 
         mainGameEngine.initialize();
-
+                
 
 //        mainGUI.showMove(1, 1, 1);
 //        mainGUI.showMove(2, 2, 2);
