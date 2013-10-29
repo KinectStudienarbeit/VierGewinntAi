@@ -23,7 +23,7 @@ public class AlphaBetaTree {
     public AlphaBetaTree(int[][] field, int depth, int player) {
 
         recTree(field, depth, 0, data, player);
-        
+
         recMinMax(data, player);
 
         // nun prüfen in welchem Kindknoten von Data data.value steht --> Spalte, die man spielen soll
@@ -37,24 +37,24 @@ public class AlphaBetaTree {
 
     }
 
-    private void recTree(int[][] processingField_above, int depth, int depth_current, Node currentNode, int player) {
+    private void recTree(int[][] processingField_prievious, int depth, int depth_current, Node currentNode, int player) {
 
         int[][] processingField_current;
 
         // End-Kondition für Rekursion. Dann wird aktuelle Node mit ihrem Tiefenwert und Score bestückt
         if (depth == depth_current) {
-            processingField_current = VierGewinntAi.cloneArray((processingField_above));
+            processingField_current = VierGewinntAi.cloneArray((processingField_prievious));
 
             //Hier evaluate aufrufen, um werte zu bekommen
             currentNode.nodeDepth = depth_current;
             currentNode.value = ArtificialIntelligence.evaluate(processingField_current, player);
         } // next depth-step
         else {
-            
+
             // go through columns from left to right
             for (int column = 0; column < 7; column++) {
                 // processingField zurückseten von vorigem Rekursionsschritt
-                processingField_current = VierGewinntAi.cloneArray((processingField_above));
+                processingField_current = VierGewinntAi.cloneArray((processingField_prievious));
 
                 // go through rows of the current column until a free space to set a new coin
                 // in the end "row" represents the coin that was set
@@ -73,13 +73,13 @@ public class AlphaBetaTree {
                 // depending on current depth player 1 or player 2 is chosen
                 // depth is odd (1,3,5,...) = current player
                 // depth is even (2,4,6,...) = opponent
-                
+
 
                 int nextPiece;
                 if (player == 2) {
-                    nextPiece = (depth_current +1) % 2 + 1;
+                    nextPiece = (depth_current + 1) % 2 + 1;
                 } else {
-                    nextPiece = 2 - (depth_current +1) % 2;
+                    nextPiece = 2 - (depth_current + 1) % 2;
                 }
 //            processingField_current[column][row] = depth_current % 2 +1;
                 processingField_current[column][row] = nextPiece;
@@ -88,15 +88,19 @@ public class AlphaBetaTree {
                 // save current depth value to orientate in which tree depth it is
                 currentNode.nodeDepth = depth_current;
 
+                if (processingField_current[0][0] == 1) {
+                    int test = 0;
+                }
+
                 if (VierGewinntAi.mainGameEngine.checkWin(processingField_current)) {
-                    currentNode.value = ArtificialIntelligence.evaluate(processingField_current, player);
-                    break;
+                    currentNode.children.add(new Node());
+                    currentNode.children.getLast().value = ArtificialIntelligence.evaluate(processingField_current, player);
                 } else {
 
                     // new children for currentNode to operate the next recursion step
                     currentNode.children.add(new Node());
 
-                    recTree(processingField_current, depth, depth_current +1, currentNode.children.getLast(), player);
+                    recTree(processingField_current, depth, depth_current + 1, currentNode.children.getLast(), player);
                 }
             }
         }
@@ -124,27 +128,23 @@ public class AlphaBetaTree {
                     recMinMax(n, player);
                 }
             }
-
-
-
-
-            // now we are in right depth. currentNode has 7 children OR HAS IST?
             
-            if(currentNode.children.size() < 7){
+            if(currentNode.children.size() != 7){
                 int test = 0;
             }
 
+            // now we are in right depth. currentNode has 7 children
 
             int minOrMax = currentNode.nodeDepth % 2;
-            try{
-            if (minOrMax == 0) {
-                // odd depth value --> maximize
-                currentNode.value = max(currentNode.children);
-            } else {
-                // even depth value --> minimize
-                currentNode.value = min(currentNode.children);
-            }
-            } catch (AllNodesEmptyException ex){
+            try {
+                if (minOrMax == 0) {
+                    // odd depth value --> maximize
+                    currentNode.value = max(currentNode.children);
+                } else {
+                    // even depth value --> minimize
+                    currentNode.value = min(currentNode.children);
+                }
+            } catch (AllNodesEmptyException ex) {
                 currentNode.empty = true;
             }
         }
@@ -152,17 +152,17 @@ public class AlphaBetaTree {
 
     }
 
-    private int max(LinkedList<AlphaBetaTree.Node> nodes) throws AllNodesEmptyException{
+    private int max(LinkedList<AlphaBetaTree.Node> nodes) throws AllNodesEmptyException {
         int returnVal = 0;
         boolean allNodesEmpty = true;
-        for(int i = 0; i< nodes.size(); i++){
-            if(!nodes.get(i).empty){
+        for (int i = 0; i < nodes.size(); i++) {
+            if (!nodes.get(i).empty) {
                 returnVal = nodes.get(i).value;
                 allNodesEmpty = false;
                 break;
             }
         }
-        if(allNodesEmpty){
+        if (allNodesEmpty) {
             throw new AllNodesEmptyException();
         }
         // nodes muss die 7 (Kind)Knoten enthalten, dessen Max/Min Wert gefunden werden muss
@@ -181,14 +181,14 @@ public class AlphaBetaTree {
     private int min(LinkedList<AlphaBetaTree.Node> nodes) throws AllNodesEmptyException {
         int returnVal = 0;
         boolean allNodesEmpty = true;
-        for(int i = 0; i< nodes.size(); i++){
-            if(!nodes.get(i).empty){
+        for (int i = 0; i < nodes.size(); i++) {
+            if (!nodes.get(i).empty) {
                 returnVal = nodes.get(i).value;
                 allNodesEmpty = false;
                 break;
             }
         }
-        if(allNodesEmpty){
+        if (allNodesEmpty) {
             throw new AllNodesEmptyException();
         }
 
@@ -212,7 +212,7 @@ public class AlphaBetaTree {
             children.add(n);
         }
     }
-    
-    private class AllNodesEmptyException extends Exception{
+
+    private class AllNodesEmptyException extends Exception {
     }
 }
