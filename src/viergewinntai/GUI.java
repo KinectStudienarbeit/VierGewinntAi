@@ -5,12 +5,11 @@
 package viergewinntai;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -35,14 +34,13 @@ public class GUI {
     private final int PIECEOFFSETXBETWEEN = 7;
     private final int PIECEOFFSETYUP = 16;
     private final int ANIMATIONYOFFSET = 20;
+    private final int ANIMATIONSPEED = 1;
     private JLabel field;
     private JPanel mainPanel = new JPanel();
     private JFrame mainFrame = new JFrame();
     private BufferedImage playerOnePic;
     private BufferedImage playerTwoPic;
     private LinkedList<JLabel> pieces = new LinkedList();
-    
-    public boolean lock = false;
 
     public void initialize() {
 
@@ -103,20 +101,33 @@ public class GUI {
         }
 
         mainPanel.add(pieces.getLast());
-        animate(pieces.getLast(), PLAYINGFIELDX + ROWBUTTONOFFSETX + PIECEOFFSETXLEFT + ((PIECEOFFSETXBETWEEN + playerOnePic.getHeight()) * (column - 1)), PLAYINGFIELDY + PIECEOFFSETYUP + ((6 - row) * playerOnePic.getHeight()), playerOnePic.getHeight(), playerOnePic.getWidth());
+        animate(pieces.getLast(), PLAYINGFIELDX + ROWBUTTONOFFSETX + PIECEOFFSETXLEFT + ((PIECEOFFSETXBETWEEN + playerOnePic.getHeight()) * (column - 1)), PLAYINGFIELDY + PIECEOFFSETYUP + ((6 - row) * playerOnePic.getHeight()), playerOnePic.getHeight(), playerOnePic.getWidth(), column -1, row -1);
         //pieces.getLast().setBounds(PLAYINGFIELDX + ROWBUTTONOFFSETX + PIECEOFFSETXLEFT + ((PIECEOFFSETXBETWEEN + playerOnePic.getHeight()) * (column-1)), PLAYINGFIELDY + PIECEOFFSETYUP + ((6 - row) * playerOnePic.getHeight()), playerOnePic.getHeight(), playerOnePic.getWidth());
     }
 
-    private void animate(JLabel piece, int x, int lastY, int width, int height) {
+    private void animate(final JLabel piece, int x, final int lastY, int width, int height, final int column, final int row) {
 
         piece.setBounds(x, ANIMATIONYOFFSET, width, height);
-        for (int i = ANIMATIONYOFFSET; i <= lastY; i++) {
-//            try {
-//                Thread.sleep(3);
-//            } catch (InterruptedException ex) {
-//            }
-            piece.setBounds(x, i, width, height);
-        }
+        
+        javax.swing.Timer t = new javax.swing.Timer(1, new ActionListener() {
+            
+            int counter = ANIMATIONYOFFSET;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                counter +=ANIMATIONSPEED;
+                piece.setBounds(piece.getX(), counter, piece.getWidth(), piece.getHeight());
+                mainPanel.repaint();
+                if(counter >= lastY + ANIMATIONSPEED){
+                    piece.setBounds(piece.getX(), lastY, piece.getWidth(), piece.getHeight());
+                    ((Timer)e.getSource()).stop();
+                    VierGewinntAi.mainGameEngine.endMove(column, row);
+                }
+            }
+        });
+        t.start();
+
     }
 
     public void showFullMessage() {
@@ -165,8 +176,8 @@ public class GUI {
                 @Override
                 public void actionPerformed(ActionEvent evt) {
 
-                    if(!lock) {
-                        lock = true;
+                    if(!GameEngine.lock) {
+                        GameEngine.lock = true;
                         VierGewinntAi.mainGameEngine.tryMove(column);
                     }
 //                    JOptionPane.showMessageDialog(null, Character.toString(column));

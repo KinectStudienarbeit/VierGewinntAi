@@ -1,7 +1,6 @@
 package viergewinntai;
 
 import java.util.LinkedList;
-import javax.swing.JOptionPane;
 
 /*
  * To change this template, choose Tools | Templates
@@ -24,7 +23,7 @@ public class AlphaBetaTree {
 
         recTree(field, depth, 0, data, player);
 
-        recMinMax(data, player);
+        recMinMax(data, player, 1);
 
         // nun prüfen in welchem Kindknoten von Data data.value steht --> Spalte, die man spielen soll
 //         for Schleife
@@ -107,7 +106,7 @@ public class AlphaBetaTree {
 
     }
 
-    private void recMinMax(Node currentNode, int player) {
+    private void recMinMax(Node currentNode, int player, int depth) {
         // depth_lpnode = depth of (l)ast (p)arent node
 
         if (currentNode.empty) {
@@ -125,19 +124,15 @@ public class AlphaBetaTree {
             for (int i = 0; i < currentNode.children.size(); i++) {
                 Node n;
                 if (!(n = currentNode.children.get(i)).children.isEmpty()) {
-                    recMinMax(n, player);
+                    recMinMax(n, player, depth + 1);
                 }
-            }
-            
-            if(currentNode.children.size() != 7){
-                int test = 0;
             }
 
             // now we are in right depth. currentNode has 7 children
 
-            int minOrMax = currentNode.nodeDepth % 2;
+            int minOrMax = depth % 2;
             try {
-                if (minOrMax == 0) {
+                if (minOrMax == 1) {
                     // odd depth value --> maximize
                     currentNode.value = max(currentNode.children);
                 } else {
@@ -147,6 +142,7 @@ public class AlphaBetaTree {
             } catch (AllNodesEmptyException ex) {
                 currentNode.empty = true;
             }
+
         }
 
 

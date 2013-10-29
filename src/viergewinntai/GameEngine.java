@@ -12,6 +12,7 @@ public class GameEngine {
     
     private boolean[] playerHuman = new boolean[2];
     private int[][] playingField = new int[7][6];  //the field with all positions, 0=empty, 1=first player, 2=second player
+    public static boolean lock = false;
 
     public int[][] getPlayingField() {
         return VierGewinntAi.cloneArray((playingField));
@@ -72,7 +73,38 @@ public class GameEngine {
             
             VierGewinntAi.mainGUI.showMove(playerTurn, column + 1, row + 1);
             
-            if(checkWin(playingField, column, row)){
+            
+//            if(checkWin(playingField, column, row)){
+//                VierGewinntAi.mainGUI.showWinMessage();
+//                resetGame();
+//                return;
+//            }
+//            
+//            if(checkFull()){
+//                VierGewinntAi.mainGUI.showFullMessage();
+//                resetGame();
+//            }
+//            
+//            if(playerTurn == 1){
+//                playerTurn = 2;
+//            } else {
+//                playerTurn = 1;
+//            }
+//            VierGewinntAi.mainGUI.showPlayerTurnMessage();
+//            
+////            new ArtificialIntelligence().evaluate(playingField, playerTurn);
+//            
+//                        
+//            if (!playerHuman[playerTurn-1]){
+//                startAi();
+//            } else {
+//                lock = false;
+//            }
+        }
+    }
+    
+    public void endMove(int column, int row){
+        if(checkWin(playingField, column, row)){
                 VierGewinntAi.mainGUI.showWinMessage();
                 resetGame();
                 return;
@@ -96,9 +128,8 @@ public class GameEngine {
             if (!playerHuman[playerTurn-1]){
                 startAi();
             } else {
-                VierGewinntAi.mainGUI.lock = false;
+                lock = false;
             }
-        }       
     }
     
     /**

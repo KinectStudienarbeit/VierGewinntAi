@@ -4,8 +4,6 @@
  */
 package viergewinntai;
 
-import javax.swing.JOptionPane;
-
 /**
  *
  * @author Dawid
