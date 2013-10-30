@@ -27,10 +27,13 @@ public class AlphaBetaTree {
 
         // nun prüfen in welchem Kindknoten von Data data.value steht --> Spalte, die man spielen soll
 //         for Schleife
+        int moveDepth = depth + 1;
         for (int i = 0; i < data.children.size(); i++) {
             if (data.children.get(i).value == data.value) {
-                playColumn = i;
-                break;
+                if(data.children.get(i).nodeDepth < moveDepth){
+                    moveDepth = data.children.get(i).nodeDepth;
+                    playColumn = i;
+                }
             }
         }
 
@@ -87,13 +90,10 @@ public class AlphaBetaTree {
                 // save current depth value to orientate in which tree depth it is
                 currentNode.nodeDepth = depth_current;
 
-                if (processingField_current[0][0] == 1) {
-                    int test = 0;
-                }
-
                 if (VierGewinntAi.mainGameEngine.checkWin(processingField_current)) {
                     currentNode.children.add(new Node());
                     currentNode.children.getLast().value = ArtificialIntelligence.evaluate(processingField_current, player);
+                    currentNode.children.getLast().nodeDepth = depth_current +1;
                 } else {
 
                     // new children for currentNode to operate the next recursion step
@@ -134,18 +134,44 @@ public class AlphaBetaTree {
             try {
                 if (minOrMax == 1) {
                     // odd depth value --> maximize
-                    currentNode.value = max(currentNode.children);
+//                    currentNode.value = max(currentNode.children);
+                    max(currentNode);
                 } else {
                     // even depth value --> minimize
-                    currentNode.value = min(currentNode.children);
+//                    currentNode.value = min(currentNode.children);
+                    min(currentNode);
                 }
             } catch (AllNodesEmptyException ex) {
                 currentNode.empty = true;
             }
-
+        }
+    }
+    
+    private void max(Node node) throws AllNodesEmptyException {
+        int returnVal = 0;
+        int childIndex = 0;
+        boolean allNodesEmpty = true;
+        for (int i = 0; i < node.children.size(); i++) {
+            if (!node.children.get(i).empty) {
+                returnVal = node.children.get(i).value;
+                childIndex = i;
+                allNodesEmpty = false;
+                break;
+            }
+        }
+        if (allNodesEmpty) {
+            throw new AllNodesEmptyException();
+        }
+        // nodes muss die 7 (Kind)Knoten enthalten, dessen Max/Min Wert gefunden werden muss
+        for (int i = 0; i < node.children.size(); i++) {
+            if (!node.children.get(i).empty && node.children.get(i).value > returnVal) {
+                returnVal = node.children.get(i).value;
+                childIndex = i;
+            }
         }
 
-
+        node.value = returnVal;
+        node.nodeDepth = node.children.get(childIndex).nodeDepth;
     }
 
     private int max(LinkedList<AlphaBetaTree.Node> nodes) throws AllNodesEmptyException {
@@ -172,6 +198,33 @@ public class AlphaBetaTree {
             int test = 0;
         }
         return returnVal;
+    }
+    
+    private void min(Node node) throws AllNodesEmptyException {
+        int returnVal = 0;
+        int childIndex = 0;
+        boolean allNodesEmpty = true;
+        for (int i = 0; i < node.children.size(); i++) {
+            if (!node.children.get(i).empty) {
+                returnVal = node.children.get(i).value;
+                childIndex = i;
+                allNodesEmpty = false;
+                break;
+            }
+        }
+        if (allNodesEmpty) {
+            throw new AllNodesEmptyException();
+        }
+
+        for (int i = 0; i < node.children.size(); i++) {
+            if (!node.children.get(i).empty && node.children.get(i).value < returnVal) {
+                returnVal = node.children.get(i).value;
+                childIndex = i;
+            }
+        }
+
+        node.value = returnVal;
+        node.nodeDepth = node.children.get(childIndex).nodeDepth;
     }
 
     private int min(LinkedList<AlphaBetaTree.Node> nodes) throws AllNodesEmptyException {
