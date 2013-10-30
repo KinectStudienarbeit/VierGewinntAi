@@ -34,7 +34,7 @@ public class GUI {
     private final int PIECEOFFSETXBETWEEN = 7;
     private final int PIECEOFFSETYUP = 16;
     private final int ANIMATIONYOFFSET = 20;
-    private final int ANIMATIONSPEED = 1;
+    private final int ANIMATIONSPEED = 6;
     private JLabel field;
     private JPanel mainPanel = new JPanel();
     private JFrame mainFrame = new JFrame();
@@ -44,7 +44,7 @@ public class GUI {
 
     public void initialize() {
 
-        VierGewinntAi.mainGameEngine.setPlayerOneHuman(true);
+        VierGewinntAi.mainGameEngine.setPlayerOneHuman(false);
         VierGewinntAi.mainGameEngine.setPlayerTwoHuman(false);
 
         showField();
@@ -107,11 +107,11 @@ public class GUI {
 
     private void animate(final JLabel piece, int x, final int lastY, int width, int height, final int column, final int row) {
 
-        piece.setBounds(x, ANIMATIONYOFFSET, width, height);
+        piece.setBounds(x, ANIMATIONYOFFSET - ((lastY - ANIMATIONYOFFSET) % ANIMATIONSPEED), width, height);
         
         javax.swing.Timer t = new javax.swing.Timer(1, new ActionListener() {
             
-            int counter = ANIMATIONYOFFSET;
+            int counter = ANIMATIONYOFFSET - ((lastY - ANIMATIONYOFFSET) % ANIMATIONSPEED);
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -119,7 +119,7 @@ public class GUI {
                 counter +=ANIMATIONSPEED;
                 piece.setBounds(piece.getX(), counter, piece.getWidth(), piece.getHeight());
                 mainPanel.repaint();
-                if(counter >= lastY + ANIMATIONSPEED){
+                if(counter >= lastY){
                     piece.setBounds(piece.getX(), lastY, piece.getWidth(), piece.getHeight());
                     ((Timer)e.getSource()).stop();
                     VierGewinntAi.mainGameEngine.endMove(column, row);

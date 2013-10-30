@@ -12,12 +12,10 @@ import java.util.Random;
  */
 public class ArtificialIntelligence {
 
-    private static int counter = 0;
     public final int THIS_PLAYER;
     private static final int ALPHABETADEPTH = 5;
-    public static boolean[] alphaBetaFinished = new boolean[(int)Math.pow(7,ALPHABETADEPTH)];
     private int[][] field;
-    private int[][] processingField;
+    public boolean random = false;
 
     public ArtificialIntelligence(int thisPlayer) {
         this.THIS_PLAYER = thisPlayer;
@@ -25,15 +23,18 @@ public class ArtificialIntelligence {
 
     public void startAi() {
 
-//        randomMove();
-        startAlphaBetaMove();
+        if (random) {
+            randomMove();
+        } else {
+            startAlphaBetaMove();
+        }
     }
 
     private void startAlphaBetaMove() {
         field = VierGewinntAi.mainGameEngine.getPlayingField();
-        processingField = VierGewinntAi.cloneArray((field));
+//        processingField = VierGewinntAi.cloneArray((field));
 
-        AlphaBetaTree alphaBetaTree = new AlphaBetaTree(field, ALPHABETADEPTH, THIS_PLAYER);
+        AlphaBetaTree alphaBetaTree = new AlphaBetaTree(VierGewinntAi.cloneArray(field), ALPHABETADEPTH, THIS_PLAYER);
         VierGewinntAi.mainGameEngine.tryMove(alphaBetaTree.getMove());
 
 
