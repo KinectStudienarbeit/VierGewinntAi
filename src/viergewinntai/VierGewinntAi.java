@@ -35,7 +35,7 @@ public class VierGewinntAi {
 
         mainGUI.initialize();
 
-        mainGameEngine.initialize();
+       // mainGameEngine.initialize();
                 
 
 //        mainGUI.showMove(1, 1, 1);

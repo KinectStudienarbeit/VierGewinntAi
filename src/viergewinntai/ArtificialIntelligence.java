@@ -13,7 +13,7 @@ import java.util.Random;
 public class ArtificialIntelligence {
 
     public final int THIS_PLAYER;
-    private static final int ALPHABETADEPTH = 5;
+    public int ALPHABETADEPTH = 5;
     private int[][] field;
     public boolean random = false;
 
