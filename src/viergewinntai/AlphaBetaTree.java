@@ -29,7 +29,7 @@ public class AlphaBetaTree {
 //         for Schleife
         int moveDepth = depth + 1;
         for (int i = 0; i < data.children.size(); i++) {
-            if (data.children.get(i).value == data.value) {
+            if (!data.children.get(i).empty && data.children.get(i).value == data.value) {
                 if(data.children.get(i).nodeDepth < moveDepth){
                     moveDepth = data.children.get(i).nodeDepth;
                     playColumn = i;
