@@ -59,7 +59,7 @@ public class GUI {
     /**
      * Builds and displays the playing field
      */
-    public void showField() {
+    private void showField() {
         mainFrame.setSize(FRAMEWIDTH, FRAMEHEIGHT);
         BufferedImage myPicture = null;
         try {
@@ -221,7 +221,7 @@ public class GUI {
      * Shows the Menu before start
      *
      */
-    public void createMenu() {
+    private void createMenu() {
 
 
         menuPanel.setBounds(800, 0, 390, 700);
@@ -267,11 +267,13 @@ public class GUI {
                     case 2: {
                         str = "normal";
                         VierGewinntAi.AI[0].ALPHABETADEPTH = 3;
+                        VierGewinntAi.AI[0].random = false;
                         break;
                     }
                     case 3: {
                         str = "hard";
                         VierGewinntAi.AI[0].ALPHABETADEPTH = 5;
+                        VierGewinntAi.AI[0].random = false;
                         break;
                     }
 
@@ -279,7 +281,7 @@ public class GUI {
 
                         str = "very hard";
                         VierGewinntAi.AI[0].ALPHABETADEPTH = 7;
-
+                        VierGewinntAi.AI[0].random = false;
                         break;
                     }
 
@@ -349,17 +351,20 @@ public class GUI {
                     case 2: {
                         str = "normal";
                         VierGewinntAi.AI[1].ALPHABETADEPTH = 3;
+                        VierGewinntAi.AI[1].random = false;
                         break;
                     }
                     case 3: {
                         str = "hard";
                         VierGewinntAi.AI[1].ALPHABETADEPTH = 5;
+                        VierGewinntAi.AI[1].random = false;
                         break;
                     }
                     case 4: {
 
                         str = "very hard";
                         VierGewinntAi.AI[1].ALPHABETADEPTH = 7;
+                        VierGewinntAi.AI[1].random = false;
                         break;
                     }
 
@@ -426,8 +431,6 @@ public class GUI {
 
     }
 
-
-    //Helperclass for SLider
     /**
      * Empties the field, called from game engine
      */

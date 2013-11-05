@@ -15,12 +15,7 @@ public class GameEngine {
     private int[][] playingField = new int[7][6];  //the field with all positions, 0=empty, 1=first player, 2=second player
     public static boolean lock = true;
     public static boolean gameEnd = true;
-
-    public int[][] getPlayingField() {
-        return VierGewinntAi.cloneArray((playingField));
-    }
     public int playerTurn; //1=first player's turn, 2=second player's turn
-    public int winRule = 4;    //how many pieces in a line to win
     
     public GameEngine(){
         playerHuman[0] = true;
@@ -252,5 +247,9 @@ public class GameEngine {
     public void resetGame() {
         initialize();
 //        VierGewinntAi.mainGUI.resetField();
+    }
+    
+    public int[][] getPlayingField() {
+        return VierGewinntAi.cloneArray((playingField));
     }
 }
