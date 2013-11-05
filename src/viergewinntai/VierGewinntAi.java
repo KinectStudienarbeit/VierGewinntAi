@@ -34,16 +34,5 @@ public class VierGewinntAi {
         // TODO code application logic here
 
         mainGUI.initialize();
-
-       // mainGameEngine.initialize();
-                
-
-//        mainGUI.showMove(1, 1, 1);
-//        mainGUI.showMove(2, 2, 2);
-//        mainGUI.showMove(1, 3, 3);
-//        mainGUI.showMove(2, 4, 4);
-//        mainGUI.showMove(1, 5, 5);
-//        mainGUI.showMove(2, 6, 6);
-//        mainGUI.showMove(1, 7, 1);
     }
 }

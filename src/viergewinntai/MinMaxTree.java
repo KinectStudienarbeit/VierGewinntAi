@@ -10,7 +10,7 @@ import java.util.LinkedList;
  *
  * @author rusinda
  */
-public class AlphaBetaTree {
+public class MinMaxTree {
 
     private Node data = new Node();
     private int playColumn;
@@ -19,7 +19,7 @@ public class AlphaBetaTree {
         return playColumn;
     }
 
-    public AlphaBetaTree(int[][] field, int depth, int player) {
+    public MinMaxTree(int[][] field, int depth, int player) {
 
         recTree(field, depth, 0, data, player);
 
@@ -174,7 +174,7 @@ public class AlphaBetaTree {
         node.nodeDepth = node.children.get(childIndex).nodeDepth;
     }
 
-    private int max(LinkedList<AlphaBetaTree.Node> nodes) throws AllNodesEmptyException {
+    private int max(LinkedList<MinMaxTree.Node> nodes) throws AllNodesEmptyException {
         int returnVal = 0;
         boolean allNodesEmpty = true;
         for (int i = 0; i < nodes.size(); i++) {
@@ -227,7 +227,7 @@ public class AlphaBetaTree {
         node.nodeDepth = node.children.get(childIndex).nodeDepth;
     }
 
-    private int min(LinkedList<AlphaBetaTree.Node> nodes) throws AllNodesEmptyException {
+    private int min(LinkedList<MinMaxTree.Node> nodes) throws AllNodesEmptyException {
         int returnVal = 0;
         boolean allNodesEmpty = true;
         for (int i = 0; i < nodes.size(); i++) {

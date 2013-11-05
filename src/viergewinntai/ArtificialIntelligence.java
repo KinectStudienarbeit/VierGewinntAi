@@ -13,7 +13,7 @@ import java.util.Random;
 public class ArtificialIntelligence {
 
     public final int THIS_PLAYER;
-    public int ALPHABETADEPTH = 3;
+    public int minMaxDepth = 3;
     private int[][] field;
     public boolean random = false;
 
@@ -26,20 +26,21 @@ public class ArtificialIntelligence {
         if (random) {
             randomMove();
         } else {
-            startAlphaBetaMove();
+            startMinMaxMove();
         }
     }
 
-    private void startAlphaBetaMove() {
+    private void startMinMaxMove() {
+        
         field = VierGewinntAi.mainGameEngine.getPlayingField();
-//        processingField = VierGewinntAi.cloneArray((field));
-
-        AlphaBetaTree alphaBetaTree = new AlphaBetaTree(VierGewinntAi.cloneArray(field), ALPHABETADEPTH, THIS_PLAYER);
-        VierGewinntAi.mainGameEngine.tryMove(alphaBetaTree.getMove());
-
-
-
-
+        MinMaxTree minMaxTree = new MinMaxTree(VierGewinntAi.cloneArray(field), minMaxDepth, THIS_PLAYER);
+        int i;
+        if(VierGewinntAi.mainGameEngine.checkMove((i = minMaxTree.getMove()))){
+            VierGewinntAi.mainGameEngine.tryMove(i);
+        } else {
+            System.err.println("AI for player +" + Integer.toString(THIS_PLAYER) + " tried to do an invalid move (column " + Integer.toString(i)  +"!" );
+            randomMove();
+        }
     }
 
     private void randomMove() {
@@ -69,31 +70,24 @@ public class ArtificialIntelligence {
                 for (int i = 0; i < 4; i++) {
                     if (evalHelp(field, column, row, i + 1, Mode.LEFT)) {
                         evals[i][field[column][row] - 1]++;
-//                        System.out.println(column + " " + row + " " + (i + 1) + "o4 left");
                     }
                     if (evalHelp(field, column, row, i + 1, Mode.LEFT_UP)) {
                         evals[i][field[column][row] - 1]++;
-//                        System.out.println(column + " " + row + " " + (i + 1) + "o4 leftup");
                     }
                     if (evalHelp(field, column, row, i + 1, Mode.UP)) {
                         evals[i][field[column][row] - 1]++;
-//                        System.out.println(column + " " + row + " " + (i + 1) + "o4 up");
                     }
                     if (evalHelp(field, column, row, i + 1, Mode.RIGHT_UP)) {
                         evals[i][field[column][row] - 1]++;
-//                        System.out.println(column + " " + row + " " + (i + 1) + "o4 rightup");
                     }
                     if (evalHelp(field, column, row, i + 1, Mode.RIGHT)) {
                         evals[i][field[column][row] - 1]++;
-//                        System.out.println(column + " " + row + " " + (i + 1) + "o4 right");
                     }
                     if (evalHelp(field, column, row, i + 1, Mode.LEFT_DOWN)) {
                         evals[i][field[column][row] - 1]++;
-//                        System.out.println(column + " " + row + " " + (i + 1) + "o4 leftdown");
                     }
                     if (evalHelp(field, column, row, i + 1, Mode.RIGHT_DOWN)) {
                         evals[i][field[column][row] - 1]++;
-//                        System.out.println(column + " " + row + " " + (i + 1) + "o4 rightdown");
                     }
                 }
 
@@ -107,35 +101,30 @@ public class ArtificialIntelligence {
                 if (column > 1 && column < 6) {
                     if (field[column - 2][row] == 0 && field[column - 1][row] == 0 && field[column + 1][row] == 0) {
                         evals[0][field[column][row] - 1]++;
-//                        System.out.println(column + " " + row + " 1o4 00x0");
                     }
                 }
                 //0x00
                 if (column > 0 && column < 5) {
                     if (field[column - 1][row] == 0 && field[column + 1][row] == 0 && field[column + 2][row] == 0) {
                         evals[0][field[column][row] - 1]++;
-//                        System.out.println(column + " " + row + " 1o4 0x00");
                     }
                 }
                 //00x0 diagonal left up
                 if (column > 1 && column < 6 && row > 0 && row < 4) {
                     if (field[column - 2][row + 2] == 0 && field[column - 1][row + 1] == 0 && field[column + 1][row - 1] == 0) {
                         evals[0][field[column][row] - 1]++;
-//                        System.out.println(column + " " + row + " 1o4 00x0 diagleftup");
                     }
                 }
                 //0x00 diagonal left up
                 if (column > 0 && column < 5 && row > 1 && row < 5) {
                     if (field[column - 1][row + 1] == 0 && field[column + 1][row - 1] == 0 && field[column + 2][row - 2] == 0) {
                         evals[0][field[column][row] - 1]++;
-//                        System.out.println(column + " " + row + " 1o4 0x00diagleftup");
                     }
                 }
                 //00x0 diagonal right up
                 if (column > 1 && column < 6 && row > 1 && row < 5) {
                     if (field[column - 2][row - 2] == 0 && field[column - 1][row - 1] == 0 && field[column + 1][row + 1] == 0) {
                         evals[0][field[column][row] - 1]++;
-//                        System.out.println(column + " " + row + " 1o4 00x0diagrightup");
                     }
                 }
 
@@ -143,7 +132,6 @@ public class ArtificialIntelligence {
                 if (column > 0 && column < 5 && row > 0 && row < 4) {
                     if (field[column - 1][row - 1] == 0 && field[column + 1][row + 1] == 0 && field[column + 2][row + 2] == 0) {
                         evals[0][field[column][row] - 1]++;
-//                        System.out.println(column + " " + row + " 1o4 0x00diagrightup");
                     }
                 }
 
@@ -151,7 +139,6 @@ public class ArtificialIntelligence {
                 if (column > 0 && column < 5) {
                     if (field[column + 1][row] == field[column][row] && field[column - 1][row] == 0 && field[column + 2][row] == 0) {
                         evals[1][field[column][row] - 1]++;
-//                        System.out.println(column + " " + row + " 2o4 0xx0");
                     }
                 }
 
@@ -159,7 +146,6 @@ public class ArtificialIntelligence {
                 if (column > 1 && column < 5 && row > 1 && row < 4) {
                     if (field[column - 1][row + 1] == field[column][row] && field[column - 2][row + 2] == 0 && field[column + 1][row - 1] == 0) {
                         evals[1][field[column][row] - 1]++;
-//                        System.out.println(column + " " + row + " 2o4 0xx0 diagonalleftup");
                     }
                 }
 
@@ -167,15 +153,11 @@ public class ArtificialIntelligence {
                 if (column > 0 && column < 5 && row > 0 && row < 4) {
                     if (field[column + 1][row + 1] == field[column][row] && field[column + 2][row + 2] == 0 && field[column - 1][row - 1] == 0) {
                         evals[1][field[column][row] - 1]++;
-//                        System.out.println(column + " " + row + " 2o4 0xx0 diagonalrightup");
                     }
                 }
             }
         }
 
-        for (int i = 0; i < 4; i++) {
-//            System.out.println(Arrays.toString(evals[i]));
-        }
         int left;
         int right;
         if (player == 1) {
@@ -194,18 +176,6 @@ public class ArtificialIntelligence {
         }
 
         int returnVal = evals[0][left] + evals[1][left] * 10 + evals[2][left] * 100 - evals[0][right] - evals[1][right] * 10 - evals[2][right] * 100;
-//        System.out.println("Field score for player " + player + ": " + returnVal);
-
-//        counter++;
-//        System.out.println(counter);
-
-//        for(int i = 5; i >=0; i--){
-//            for(int j = 0; j<7 ; j++){
-//                System.out.print(field[j][i]);
-//            }
-//            System.out.println("");
-//        }
-//        System.out.println(returnVal);
 
         return returnVal;
     }

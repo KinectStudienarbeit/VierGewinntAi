@@ -63,7 +63,7 @@ public class GameEngine {
     public void tryMove(int column) {
         if (!checkMove(column)) {
             VierGewinntAi.mainGUI.showInvalidMoveMessage();
-            System.out.println("Player: " + playerTurn + " Column: " + column);
+            System.err.println("Wrong move! Player: " + playerTurn + " Column: " + column);
             lock = false;
         } else {
             int i = 0;

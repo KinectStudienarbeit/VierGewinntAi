@@ -75,11 +75,6 @@ public class GUI {
         mainPanel.add(field);
         field.setBounds(PLAYINGFIELDX, PLAYINGFIELDY, myPicture.getWidth(), myPicture.getHeight());
         field.setVisible(true);
-//        System.out.println(field.getLocation());
-
-
-
-
 
 
         RowButton[] buttons = new RowButton[7];
@@ -228,8 +223,6 @@ public class GUI {
 
         menuPanel.setLayout(null);
 
-        System.out.println("Menu angezeigt");
-
         //left Side
         final JRadioButton human1 = new JRadioButton("Human");
         human1.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -266,13 +259,13 @@ public class GUI {
                     }
                     case 2: {
                         str = "normal";
-                        VierGewinntAi.AI[0].ALPHABETADEPTH = 3;
+                        VierGewinntAi.AI[0].minMaxDepth = 3;
                         VierGewinntAi.AI[0].random = false;
                         break;
                     }
                     case 3: {
                         str = "hard";
-                        VierGewinntAi.AI[0].ALPHABETADEPTH = 5;
+                        VierGewinntAi.AI[0].minMaxDepth = 5;
                         VierGewinntAi.AI[0].random = false;
                         break;
                     }
@@ -280,7 +273,7 @@ public class GUI {
                     case 4: {
 
                         str = "very hard";
-                        VierGewinntAi.AI[0].ALPHABETADEPTH = 7;
+                        VierGewinntAi.AI[0].minMaxDepth = 7;
                         VierGewinntAi.AI[0].random = false;
                         break;
                     }
@@ -350,20 +343,20 @@ public class GUI {
                     }
                     case 2: {
                         str = "normal";
-                        VierGewinntAi.AI[1].ALPHABETADEPTH = 3;
+                        VierGewinntAi.AI[1].minMaxDepth = 3;
                         VierGewinntAi.AI[1].random = false;
                         break;
                     }
                     case 3: {
                         str = "hard";
-                        VierGewinntAi.AI[1].ALPHABETADEPTH = 5;
+                        VierGewinntAi.AI[1].minMaxDepth = 5;
                         VierGewinntAi.AI[1].random = false;
                         break;
                     }
                     case 4: {
 
                         str = "very hard";
-                        VierGewinntAi.AI[1].ALPHABETADEPTH = 7;
+                        VierGewinntAi.AI[1].minMaxDepth = 7;
                         VierGewinntAi.AI[1].random = false;
                         break;
                     }
