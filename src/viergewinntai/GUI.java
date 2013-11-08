@@ -65,6 +65,7 @@ public class GUI {
         try {
             myPicture = ImageIO.read(new File(PLAYINGFIELDPIC));
         } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "The playing field file \"" + PLAYINGFIELDPIC + "\" could not be found!", "Error!", 0);
         }
         field = new JLabel(new ImageIcon(myPicture));
         mainFrame.setLayout(null);
@@ -87,8 +88,13 @@ public class GUI {
         mainFrame.setVisible(true);
         try {
             playerOnePic = ImageIO.read(new File(PLAYERONEPIC));
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "The file \"" + PLAYERONEPIC + "\" could not be found!", "Error!", 0);
+        }
+        try {
             playerTwoPic = ImageIO.read(new File(PLAYERTWOPIC));
         } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "The file \"" + PLAYERTWOPIC + "\" could not be found!", "Error!", 0);
         }
 
     }

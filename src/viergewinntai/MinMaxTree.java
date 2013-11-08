@@ -30,7 +30,7 @@ public class MinMaxTree {
         int moveDepth = depth + 1;
         for (int i = 0; i < data.children.size(); i++) {
             if (!data.children.get(i).empty && data.children.get(i).value == data.value) {
-                if(data.children.get(i).nodeDepth < moveDepth){
+                if (data.children.get(i).nodeDepth < moveDepth) {
                     moveDepth = data.children.get(i).nodeDepth;
                     playColumn = i;
                 }
@@ -67,7 +67,7 @@ public class MinMaxTree {
 
                 //detect if the column is full and skip  
                 if (row > 5) {
-                    currentNode.addChild(new Node());
+                    currentNode.children.add(new Node());
                     currentNode.children.getLast().empty = true;
                     continue;
                 }
@@ -93,7 +93,7 @@ public class MinMaxTree {
                 if (VierGewinntAi.mainGameEngine.checkWin(processingField_current)) {
                     currentNode.children.add(new Node());
                     currentNode.children.getLast().value = ArtificialIntelligence.evaluate(processingField_current, player);
-                    currentNode.children.getLast().nodeDepth = depth_current +1;
+                    currentNode.children.getLast().nodeDepth = depth_current + 1;
                 } else {
 
                     // new children for currentNode to operate the next recursion step
@@ -131,23 +131,17 @@ public class MinMaxTree {
             // now we are in right depth. currentNode has 7 children
 
             int minOrMax = depth % 2;
-            try {
-                if (minOrMax == 1) {
-                    // odd depth value --> maximize
-//                    currentNode.value = max(currentNode.children);
-                    max(currentNode);
-                } else {
-                    // even depth value --> minimize
-//                    currentNode.value = min(currentNode.children);
-                    min(currentNode);
-                }
-            } catch (AllNodesEmptyException ex) {
-                currentNode.empty = true;
+            if (minOrMax == 1) {
+                // odd depth value --> maximize
+                max(currentNode);
+            } else {
+                // even depth value --> minimize
+                min(currentNode);
             }
         }
     }
-    
-    private void max(Node node) throws AllNodesEmptyException {
+
+    private void max(Node node) {
         int returnVal = 0;
         int childIndex = 0;
         boolean allNodesEmpty = true;
@@ -160,7 +154,8 @@ public class MinMaxTree {
             }
         }
         if (allNodesEmpty) {
-            throw new AllNodesEmptyException();
+            node.empty = true;
+            return;
         }
         // nodes muss die 7 (Kind)Knoten enthalten, dessen Max/Min Wert gefunden werden muss
         for (int i = 0; i < node.children.size(); i++) {
@@ -174,33 +169,7 @@ public class MinMaxTree {
         node.nodeDepth = node.children.get(childIndex).nodeDepth;
     }
 
-    private int max(LinkedList<MinMaxTree.Node> nodes) throws AllNodesEmptyException {
-        int returnVal = 0;
-        boolean allNodesEmpty = true;
-        for (int i = 0; i < nodes.size(); i++) {
-            if (!nodes.get(i).empty) {
-                returnVal = nodes.get(i).value;
-                allNodesEmpty = false;
-                break;
-            }
-        }
-        if (allNodesEmpty) {
-            throw new AllNodesEmptyException();
-        }
-        // nodes muss die 7 (Kind)Knoten enthalten, dessen Max/Min Wert gefunden werden muss
-        for (int i = 0; i < nodes.size(); i++) {
-            if (!nodes.get(i).empty && nodes.get(i).value > returnVal) {
-                returnVal = nodes.get(i).value;
-            }
-        }
-
-        if (returnVal == Integer.MAX_VALUE) {
-            int test = 0;
-        }
-        return returnVal;
-    }
-    
-    private void min(Node node) throws AllNodesEmptyException {
+    private void min(Node node) {
         int returnVal = 0;
         int childIndex = 0;
         boolean allNodesEmpty = true;
@@ -213,7 +182,8 @@ public class MinMaxTree {
             }
         }
         if (allNodesEmpty) {
-            throw new AllNodesEmptyException();
+            node.empty = true;
+            return;
         }
 
         for (int i = 0; i < node.children.size(); i++) {
@@ -227,41 +197,11 @@ public class MinMaxTree {
         node.nodeDepth = node.children.get(childIndex).nodeDepth;
     }
 
-    private int min(LinkedList<MinMaxTree.Node> nodes) throws AllNodesEmptyException {
-        int returnVal = 0;
-        boolean allNodesEmpty = true;
-        for (int i = 0; i < nodes.size(); i++) {
-            if (!nodes.get(i).empty) {
-                returnVal = nodes.get(i).value;
-                allNodesEmpty = false;
-                break;
-            }
-        }
-        if (allNodesEmpty) {
-            throw new AllNodesEmptyException();
-        }
-
-        for (int i = 0; i < nodes.size(); i++) {
-            if (!nodes.get(i).empty && nodes.get(i).value < returnVal) {
-                returnVal = nodes.get(i).value;
-            }
-        }
-
-        return returnVal;
-    }
-
     private class Node {
 
         public int value;
         public int nodeDepth;
         public boolean empty = false;
         public LinkedList<Node> children = new LinkedList<>();
-
-        public void addChild(Node n) {
-            children.add(n);
-        }
-    }
-
-    private class AllNodesEmptyException extends Exception {
     }
 }
